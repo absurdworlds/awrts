@@ -1,4 +1,4 @@
-RootPath = ../..
+RootPath = ../../..
 Sources = main.cpp
 # Defines = AW_MODULE_UI
 Libraries = Irrlicht awcore awgui
