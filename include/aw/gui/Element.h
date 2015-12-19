@@ -14,7 +14,7 @@
 #include <aw/common/types.h>
 #include <aw/common/EventListener.h>
 #include <aw/math/Rect.h>
-#include <aw/gui/Coordinate.h>
+#include <aw/gui/Size.h>
 #include <aw/gui/KeyboardEvent.h>
 #include <aw/gui/MouseEvent.h>
 #include <aw/gui/GUIEvent.h>
@@ -40,32 +40,22 @@ public:
 		return parent;
 	}
 
-	virtual Vector2d<Coordinate> getPosition()
+	virtual Size getPosition() const
 	{
-		return rect.getUpperLeft();
+		return position;
 	}
 
-	virtual Vector2d<Coordinate> getAbsolutePosition()
+	virtual Size getDimensions() const
 	{
-		return absoluteRect.getUpperLeft();
+		return dimensions;
 	}
 
-	virtual Coordinate getWidth() const
+	virtual Vector2d<i32> getAbsolutePosition()
 	{
-		return rect.getWidth();
-	}
-	
-	virtual Coordinate getHeight() const
-	{
-		return rect.getHeight();
+		return getAbsoluteRect().getUpperLeft();
 	}
 
-	virtual Rect<Coordinate> getRect() const
-	{
-		return rect;
-	}
-
-	virtual Rect<Coordinate> getAbsoluteRect() const
+	virtual Rect<i32> getAbsoluteRect() const
 	{
 		// Absolute rect needs updating (element moved,
 		// parent moved, etc)
@@ -75,7 +65,7 @@ public:
 		return absoluteRect;
 	}
 
-	virtual Rect<Coordinate> getClientRect() const
+	virtual Rect<i32> getClientRect() const
 	{
 	}
 
@@ -87,27 +77,15 @@ public:
 		return style;
 	}
 
-	virtual void setPosition(Vector2d<Coordinate> position)
+	virtual void setPosition(Size newPosition)
 	{
-		rect.setPosition(position);
+		position = newPosition;
 		invalidate();
 	}
 
-	virtual void setWidth(Coordinate width)
+	virtual void setDimensions(Size newSize)
 	{
-		rect.setWidth(width);
-		invalidate();
-	}
-
-	virtual void setHeight(Coordinate height)
-	{
-		rect.setHeight(height);
-		invalidate();
-	}
-
-	virtual void setRect(Rect<Coordinate> newRect)
-	{
-		rect = newRect;
+		dimensions = newSize;
 		invalidate();
 	}
 
@@ -165,41 +143,32 @@ private:
 	void recalculateAbsoluteRect() const
 	{
 		if (!getParent()) {
-			absoluteRect = getRect();
+			/*absoluteRect = TODO */;
 			return;
 		}
-		
+
 		// compute parent rect
-		Rect<Coordinate> parentRect = parent->getAbsoluteRect();
-		Coordinate height = parentRect.getHeight();
-		Coordinate width  = parentRect.getWidth();
+		Rect<i32> parentRect = parent->getAbsoluteRect();
 
-		// references to local rect coordinates, for convenience
-		auto& ulx = rect.upperLeft.x();
-		auto& uly = rect.upperLeft.y();
-		auto& lrx = rect.lowerRight.x();
-		auto& lry = rect.lowerRight.y();
+		i32 height = parentRect.getHeight();
+		i32 width  = parentRect.getWidth();
 
-		// go from local coordinates to absolute (move origin)
-		Rect<Coordinate> temp;
-		temp.upperLeft  = parentRect.upperLeft;
-		temp.lowerRight = parentRect.upperLeft;
+		Vector2d<i32> parentDims(width, height);
 
-		// compute using Coordinate's definition:
-		// parent_dimension * fraction + offset
-		temp.upperLeft.x()  += width  * ulx.fraction + ulx.offset;
-		temp.upperLeft.y()  += height * uly.fraction + uly.offset;
-		temp.lowerRight.x() += width  * lrx.fraction + lrx.offset;
-		temp.lowerRight.y() += height * lry.fraction + lry.offset;
+		Vector2d<i32> dims = dimensions.toPixels(parentDims);
+		Vector2d<i32> pos = position.toPixels(parentDims);
 
-		absoluteRect = temp;
+		absoluteRect.upperLeft = parent->getOrigin() + pos;
+		absoluteRect.lowerRight = upperLeft + dims;
+
 		updateAbsoluteRect = false;
 	}
 
-	Rect<Coordinate> rect;
+	Size position;
+	Size dimensions;
 
 	mutable bool updateAbsoluteRect;
-	mutable Rect<Coordinate> absoluteRect;
+	mutable Rect<i32> absoluteRect;
 
 	Style* style;
 	Element* parent;
