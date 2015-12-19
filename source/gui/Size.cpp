@@ -6,7 +6,7 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-
+#include <aw/gui/Size.h>
 namespace aw {
 namespace gui {
 Size Size::makeFixed(i32 x, i32 y)

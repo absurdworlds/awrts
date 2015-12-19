@@ -8,8 +8,7 @@
  */
 #ifndef aw_gui_Size_
 #define aw_gui_Size_
-#include <aw/math/Rect.h>
-
+#include <aw/math/Vector2d.h>
 namespace aw {
 namespace gui {
 /*!
