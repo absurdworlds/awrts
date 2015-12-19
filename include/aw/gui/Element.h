@@ -116,7 +116,7 @@ public:
 	 * Accept a GUI Element Visitor. Useful for performing
 	 * various operations on Elements and their children.
 	 */
-	virtual void accept(gui::Visitor& visitor) = 0;
+	virtual void accept(gui::Visitor& visitor);
 
 	/*!
 	 * Receive event.
