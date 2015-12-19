@@ -50,7 +50,7 @@ public:
 		return dimensions;
 	}
 
-	virtual Vector2d<i32> getAbsolutePosition()
+	virtual Vector2d<i32> getAbsolutePosition() const
 	{
 		return getAbsoluteRect().getUpperLeft();
 	}
