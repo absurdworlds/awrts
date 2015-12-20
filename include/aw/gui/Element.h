@@ -11,82 +11,26 @@
 #define _aw_GUIElement_
 #include <string>
 
-#include <aw/common/types.h>
-#include <aw/common/EventListener.h>
-#include <aw/math/Rect.h>
-#include <aw/gui/Size.h>
-#include <aw/gui/KeyboardEvent.h>
-#include <aw/gui/MouseEvent.h>
-#include <aw/gui/GUIEvent.h>
+#include <aw/gui/Canvas.h>
 #include <aw/core/Logger.h>
 
 namespace aw {
 namespace gui {
-class Canvas;
-class Widget;
-class Style;
-class Visitor;
-
 //! Base class for GUI elements
-class Element : public EventListener {
+class Element : public Canvas {
 public:
+	Element()
+		: parent(nullptr), updateAbsoluteRect(true)
+	{
+	}
 	virtual ~Element() = default;
 
 	/*!
 	 * Returns pointer to parent element.
 	 */
-	virtual Element* getParent() const
+	virtual Canvas* getParent() const
 	{
 		return parent;
-	}
-
-	virtual Size getPosition() const
-	{
-		return position;
-	}
-
-	virtual Size getDimensions() const
-	{
-		return dimensions;
-	}
-
-	virtual Vector2d<i32> getAbsolutePosition() const
-	{
-		return getAbsoluteRect().getUpperLeft();
-	}
-
-	virtual Rect<i32> getAbsoluteRect() const
-	{
-		// Absolute rect needs updating (element moved,
-		// parent moved, etc)
-		if (updateAbsoluteRect)
-			recalculateAbsoluteRect();
-
-		return absoluteRect;
-	}
-
-	virtual Rect<i32> getClientRect() const
-	{
-	}
-
-	virtual Style* getStyle() const
-	{
-		if (!style)
-			return parent->getStyle();
-
-		return style;
-	}
-
-	virtual void setPosition(Size newPosition)
-	{
-		position = newPosition;
-		invalidate();
-	}
-
-	virtual void setDimensions(Size newSize)
-	{
-		dimensions = newSize;
-		invalidate();
 	}
 
 	void setParent(Element* newParent)
@@ -100,77 +44,7 @@ public:
 		parent = nullptr;
 		invalidate();
 	}
-
-	virtual void setStyle(Style* newStyle)
-	{
-		// TODO: if newStyle == parent->style, should it be reset to 0?
-		style = newStyle;
-		invalidate();
-	}
-
-
-	virtual Canvas* toCanvas() = 0;
-	virtual Widget* toWidget() = 0;
-
-	/*!
-	 * Accept a GUI Element Visitor. Useful for performing
-	 * various operations on Elements and their children.
-	 */
-	virtual void accept(gui::Visitor& visitor);
-
-	/*!
-	 * Receive event.
-	 * Most commonly used to receive user input.
-	 * \return
-	 *      true if event was consumed.
-	 */
-	virtual bool onEvent(Event* event) = 0;
-
-	virtual void invalidate()
-	{
-		updateAbsoluteRect = true;
-	}
-
-	void setName(std::string name)
-	{
-	}
-protected:
-	Element()
-		: parent(nullptr), updateAbsoluteRect(true)
-	{
-	}
 private:
-	void recalculateAbsoluteRect() const
-	{
-		if (!getParent()) {
-			/*absoluteRect = TODO */;
-			return;
-		}
-
-		// compute parent rect
-		Rect<i32> parentRect = parent->getAbsoluteRect();
-
-		i32 height = parentRect.getHeight();
-		i32 width  = parentRect.getWidth();
-
-		Vector2d<i32> parentDims(width, height);
-
-		Vector2d<i32> dims = dimensions.toPixels(parentDims);
-		Vector2d<i32> pos = position.toPixels(parentDims);
-
-		absoluteRect.upperLeft = parent->getOrigin() + pos;
-		absoluteRect.lowerRight = upperLeft + dims;
-
-		updateAbsoluteRect = false;
-	}
-
-	Size position;
-	Size dimensions;
-
-	mutable bool updateAbsoluteRect;
-	mutable Rect<i32> absoluteRect;
-
-	Style* style;
 	Element* parent;
 };
 

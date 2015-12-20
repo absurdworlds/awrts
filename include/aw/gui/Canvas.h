@@ -30,6 +30,63 @@ public:
 
 	virtual ~Canvas() = default;
  
+
+	virtual Size getPosition() const
+	{
+		return position;
+	}
+
+	virtual Size getDimensions() const
+	{
+		return dimensions;
+	}
+
+	virtual void setPosition(Size newPosition)
+	{
+		position = newPosition;
+		invalidate();
+	}
+
+	virtual void setDimensions(Size newSize)
+	{
+		dimensions = newSize;
+		invalidate();
+	}
+	
+	virtual Rect<i32> getAbsoluteRect() const
+	{
+		// Absolute rect needs updating (element moved,
+		// parent moved, etc)
+		if (updateAbsoluteRect)
+			recalculateAbsoluteRect();
+
+		return absoluteRect;
+	}
+
+	virtual Vector2d<i32> getAbsolutePosition() const
+	{
+		return getAbsoluteRect().getUpperLeft();
+	}
+
+	virtual Rect<i32> getClientRect() const
+	{
+	}
+
+	virtual Style* getStyle() const
+	{
+		if (!style)
+			return parent->getStyle();
+
+		return style;
+	}
+
+	virtual void setStyle(Style* newStyle)
+	{
+		// TODO: if newStyle == parent->style, should it be reset to 0?
+		style = newStyle;
+		invalidate();
+	}
+
 	/*!
 	 * Add a child element
 	 */
@@ -50,8 +107,31 @@ public:
 	void bringToFront(Element* e);
 	void sendToBack(Element* e);
 
+	/*!
+	 * Receive event.
+	 * Most commonly used to receive user input.
+	 * \return
+	 *      true if event was consumed.
+	 */
 	virtual bool onEvent(Event* event);
+	
+	virtual void invalidate()
+	{
+		updateAbsoluteRect = true;
+	}
 
+	void setName(std::string name)
+	{
+	}
+
+	std::string getName() const
+	{
+	}
+
+	/*!
+	 * Accept a GUI Element Visitor. Used for performing
+	 * various operations on Elements and their children.
+	 */
 	virtual void accept(Visitor& visitor);
 
 	typedef IteratorWrapper<elements_t::iterator, Element> iterator;
@@ -132,6 +212,38 @@ protected:
 	Element* getElementFromPoint(Vector2d<i32> point, Vector2d<i32> bounds);
 
 private:
+	void recalculateAbsoluteRect() const
+	{
+		if (!getParent()) {
+			/*absoluteRect = TODO */;
+			return;
+		}
+
+		// compute parent rect
+		Rect<i32> parentRect = parent->getAbsoluteRect();
+
+		i32 height = parentRect.getHeight();
+		i32 width  = parentRect.getWidth();
+
+		Vector2d<i32> parentDims(width, height);
+
+		Vector2d<i32> dims = dimensions.toPixels(parentDims);
+		Vector2d<i32> pos = position.toPixels(parentDims);
+
+		absoluteRect.upperLeft = parent->getOrigin() + pos;
+		absoluteRect.lowerRight = upperLeft + dims;
+
+		updateAbsoluteRect = false;
+	}
+
+	Size position;
+	Size dimensions;
+
+	mutable bool updateAbsoluteRect;
+	mutable Rect<i32> absoluteRect;
+
+	Style* style;
+
 	elements_t::iterator findElement(Element* e);
 	bool processEvent(MouseEvent* event);
 	bool processEvent(GUIEvent* event);
