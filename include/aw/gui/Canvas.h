@@ -7,19 +7,21 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_GUI_canvas_
-#define _aw_GUI_canvas_
+#ifndef aw_gui_Container_h
+#define aw_gui_Container_h
 #include <memory>
+#include <aw/utility/iterators/Wrapper.h>
 
-#include <aw/gui/Element.h>
 namespace aw {
 namespace gui {
-class Canvas : public Element {
+class Element;
+
+class Container {
 public:
 	typedef std::vector<std::unique_ptr<Element>> elements_t;
 
-	Canvas() = default;
-	virtual ~Canvas() = default;
+	Container() = default;
+	virtual ~Container() = default;
  
 	/*!
 	 * Add a child element
@@ -43,70 +45,11 @@ public:
 	virtual bool onEvent(Event* event);
 	virtual void accept(Visitor& visitor);
 
-	virtual Canvas* toCanvas()
-	{
-		return this;
-	}
+	typedef IteratorWrapper<elements_t::iterator, Element> iterator;
+	typedef IteratorWrapper<elements_t::const_iterator, Element> const_iterator;
 
-	virtual Widget* toWidget()
-	{
-		return nullptr;
-	}
-
-	class iterator :
-	      public std::iterator<std::random_access_iterator_tag, Element> {
-	public:
-		typedef elements_t::const_iterator base_t;
-
-		iterator(base_t base)
-			: base(base)
-		{}
-
-		reference operator*() const
-		{
-			return **base;
-		}
-
-		pointer operator->() const
-		{
-			return (*base).get();
-		}
-
-		iterator& operator++()
-		{
-			++base;
-			return *this;
-		}
-
-		iterator& operator--()
-		{
-			--base;
-			return *this;
-		}
-
-		bool operator == (iterator const& other)
-		{
-			return base == other.base;
-		}
-
-		bool operator != (iterator const& other)
-		{
-			return base != other.base;
-		}
-
-		bool operator == (base_t const& other)
-		{
-			return base == other;
-		}
-
-		bool operator != (base_t const& other)
-		{
-			return base != other;
-		}
-	private:
-		friend class Canvas;
-		base_t base;
-	};
+	typedef std::reverse_iterator<iterator> reverse_iterator;
+	typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
 	typedef std::reverse_iterator<iterator> reverse_iterator;
 
@@ -130,9 +73,64 @@ public:
 
 	iterator findElement(Element* e) const;
 
-	virtual void invalidate()
+	auto begin()
 	{
-		Element::invalidate();
+		return iterator(std::begin(elements));
+	}
+
+	auto end()
+	{
+		return iterator(std::end(elements));
+	}
+
+	auto rbegin()
+	{
+		return reverse_iterator(std::rbegin(elements));
+	}
+
+	auto rend()
+	{
+		return reverse_iterator(std::rend(elements));
+	}
+
+	auto cbegin() const
+	{
+		return const_iterator(std::cbegin(elements));
+	}
+
+	auto cend() const
+	{
+		return const_iterator(std::cend(elements));
+	}
+
+	auto begin() const
+	{
+		return cbegin();
+	}
+
+	auto end() const
+	{
+		return cend();
+	}
+
+	auto crbegin() const
+	{
+		return const_reverse_iterator(std::crbegin(elements));
+	}
+
+	auto crend() const
+	{
+		return const_reverse_iterator(std::crend(elements));
+	}
+
+	auto rbegin() const
+	{
+		return crbegin();
+	}
+
+	auto rend() const
+	{
+		return crend();
 	}
 protected:
 	void makeActive(Element* element) {
@@ -150,26 +148,6 @@ private:
 	Element* active;
 	Element* hovered;
 };
-
-inline Canvas::iterator begin(Canvas* canvas)
-{
-	return canvas->getFirstChild();
-}
-
-inline Canvas::iterator end(Canvas* canvas)
-{
-	return canvas->getLastChild();
-}
-
-inline auto rbegin(Canvas& canvas)
-{
-	return Canvas::reverse_iterator(canvas.getLastChild());
-}
-
-inline auto rend(Canvas& canvas)
-{
-	return Canvas::reverse_iterator(canvas.getFirstChild());
-}
 } // namespace gui
 } // namespace aw
-#endif //_aw_GUI_canvas_
+#endif //aw_gui_Container_h
