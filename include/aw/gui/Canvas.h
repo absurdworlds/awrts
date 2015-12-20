@@ -7,21 +7,28 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef aw_gui_Container_h
-#define aw_gui_Container_h
-#include <memory>
+#ifndef aw_gui_Canvas_h
+#define aw_gui_Canvas_h
+#include <aw/common/types.h>
+#include <aw/math/Rect.h>
+#include <aw/common/EventListener.h>
 #include <aw/utility/iterators/Wrapper.h>
+
+#include <aw/gui/KeyboardEvent.h>
+#include <aw/gui/MouseEvent.h>
+#include <aw/gui/GUIEvent.h>
 
 namespace aw {
 namespace gui {
 class Element;
+class Visitor;
 
-class Container {
+//! Base class for GUI elements
+class Canvas : public EventListener {
 public:
 	typedef std::vector<std::unique_ptr<Element>> elements_t;
 
-	Container() = default;
-	virtual ~Container() = default;
+	virtual ~Canvas() = default;
  
 	/*!
 	 * Add a child element
@@ -42,7 +49,9 @@ public:
 
 	void bringToFront(Element* e);
 	void sendToBack(Element* e);
+
 	virtual bool onEvent(Event* event);
+
 	virtual void accept(Visitor& visitor);
 
 	typedef IteratorWrapper<elements_t::iterator, Element> iterator;
@@ -53,25 +62,8 @@ public:
 
 	typedef std::reverse_iterator<iterator> reverse_iterator;
 
-	virtual iterator getFirstChild() const
-	{
-		return iterator(std::begin(elements));
-	}
-	virtual iterator getLastChild() const
-	{
-		return iterator(std::end(elements));
-	}
-
-	virtual reverse_iterator rbegin() const
-	{
-		return reverse_iterator(std::rbegin(elements));
-	}
-	virtual reverse_iterator rend() const
-	{
-		return reverse_iterator(std::rend(elements));
-	}
-
-	iterator findElement(Element* e) const;
+	iterator findElement(Element* e);
+	const_iterator findElement(Element* e) const;
 
 	auto begin()
 	{
@@ -150,4 +142,4 @@ private:
 };
 } // namespace gui
 } // namespace aw
-#endif //aw_gui_Container_h
+#endif //aw_gui_Canvas_h
