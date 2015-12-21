@@ -79,6 +79,14 @@ struct Size {
 	 */
 	Vector2d<i32> toPixels(Vector2d<i32> parent) const;
 
+	Vector2d<i32> toPixels() const
+	{
+		if (type != Fixed)
+			return Vector2d<i32>();
+
+		return Vector2d<i32>(data[0].i, data[1].i);
+	}
+
 private:
 	Size(Format type)
 		: type(type)
