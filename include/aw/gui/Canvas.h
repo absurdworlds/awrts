@@ -44,7 +44,7 @@ public:
 	 * List of flags for hitTest method.
 	 */
 	enum HitTestFlags {
-		TestElement = 0b01,
+		TestSelf = 0b01,
 		TestChildren = 0b10,
 		TestRecursive = 0b100,
 	};
@@ -54,13 +54,11 @@ public:
 	 * \param flags
 	 * 	- 0b01: will test only element,
 	 * 	- 0b10: will test only children
-	 * 	(by calling hitTest(point, 0b01) for each child),
 	 * 	- 0b11: will test both element and children,
-	 * 	- 0b110: will test children recursively
-	 * 	(by calling hitTest(point 0b111) for each child)
-	 * 	- 0b111: will test element and recursively test children
+	 * 	- 0b100: when set together with TestChildren flag,
+	 * 	will test children recursively.
 	 */
-	bool hitTest(Vector2d<i32> point, HitTestFlags flags = 0b01) const;
+	bool hitTest(Vector2d<i32> point, HitTestFlags flags = TestSelf) const;
 
 	/*!
 	 * Get currently applied style
