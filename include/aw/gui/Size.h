@@ -77,7 +77,7 @@ struct Size {
 	/*!
 	 * Convert size into pixels. Result depends on type.
 	 */
-	Vector2d<i32> toPixels(Vector2d<i32> parent);
+	Vector2d<i32> toPixels(Vector2d<i32> parent) const;
 
 private:
 	Size(Format type)
