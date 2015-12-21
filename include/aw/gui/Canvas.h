@@ -131,8 +131,6 @@ public:
 	typedef std::reverse_iterator<iterator> reverse_iterator;
 	typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
 
-	typedef std::reverse_iterator<iterator> reverse_iterator;
-
 	iterator findElement(Element* e);
 	const_iterator findElement(Element* e) const;
 
