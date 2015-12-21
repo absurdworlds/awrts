@@ -69,6 +69,7 @@ public:
 	 */
 	virtual Style* getStyle() const final
 	{
+		auto style = Canvas::getStyle();
 		if (!style)
 			return parent->getStyle();
 
