@@ -55,14 +55,24 @@ struct Size {
 	};
 
 	/*!
-	 * Screate static pixel size.
+	 * Construct size of (0px,0px)
 	 */
-	static Size makeFixed(i32 x, i32 y)
-	static Size makeScalableX(f32 x, i32 y)
-	static Size makeScalableY(i32 x, f32 y)
-	static Size makeScalable(i32 x, i32 y)
-	static Size makeAspectLockedX(f32 y, f32 ratio)
-	static Size makeAspectLockedY(f32 x, f32 ratio)
+	Size()
+		: type(Fixed)
+	{
+		data[0].i = 0;
+		data[1].i = 0;
+	}
+
+	/*!
+	 * Create static pixel size.
+	 */
+	static Size makeFixed(i32 x, i32 y);
+	static Size makeScalableX(f32 x, i32 y);
+	static Size makeScalableY(i32 x, f32 y);
+	static Size makeScalable(i32 x, i32 y);
+	static Size makeAspectLockedX(f32 y, f32 ratio);
+	static Size makeAspectLockedY(f32 x, f32 ratio);
 
 	/*!
 	 * Convert size into pixels. Result depends on type.
