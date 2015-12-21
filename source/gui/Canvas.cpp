@@ -80,6 +80,19 @@ Element* Canvas::getActiveElement()
 	return active;
 }
 
+bool Canvas::broadcast(Event* event)
+{
+	bool consumed;
+	for (auto e& : elements) {
+		consumed = e->onEvent(event);
+
+		if (consumed)
+			return true;
+	}
+
+	return consumed;
+}
+
 bool Canvas::onEvent(Event* event)
 {
 /*

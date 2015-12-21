@@ -104,7 +104,9 @@ public:
 	 *      true if event was consumed.
 	 */
 	virtual bool onEvent(Event* event);
-	
+
+	bool broadcast(Event* event);
+
 	/*!
 	 * Causes element's absolute dimensions to be recalculated
 	 */
