@@ -12,73 +12,78 @@ namespace gui {
 Size Size::makeFixed(i32 x, i32 y)
 {
 	Size tmp(Fixed);
-	tmp.fixed.x = x;
-	tmp.fixed.y = y;
+	tmp.data[0].i = x;
+	tmp.data[1].i = y;
 	return tmp;		
 }
 
 Size Size::makeScalableX(f32 x, i32 y)
 {
 	Size tmp(ScalableX);
-	tmp.scalableX.scale = x;
-	tmp.scalableX.coord = y;
+	tmp.data[0].f = x;
+	tmp.data[1].i = y;
 	return tmp;		
 }
 
 Size Size::makeScalableY(i32 x, f32 y)
 {
 	Size tmp(ScalableY);
-	tmp.scalableX.coord = x;
-	tmp.scalableX.scale = y;
+	tmp.data[0].i = x;
+	tmp.data[1].f = y;
 	return tmp;		
 }
 
 Size Size::makeScalable(i32 x, i32 y)
 {
 	Size tmp(Scalable);
-	tmp.scalableX.x = x;
-	tmp.scalableX.y = y;
+	tmp.data[0].f = x;
+	tmp.data[1].f = y;
 	return tmp;		
 }
 
 Size Size::makeAspectLockedX(f32 y, f32 ratio)
 {
 	Size tmp(AspectLockedX);
-	tmp.aspect.coord = y;
-	tmp.aspect.ratio = ratio;
+	tmp.data[0].f = ratio;
+	tmp.data[1].f = y;
 	return tmp;		
 }
 
 Size Size::makeAspectLockedY(f32 x, f32 ratio)
 {
 	Size tmp(AspectLockedY);
-	tmp.aspect.coord = x;
-	tmp.aspect.ratio = ratio;
+	tmp.data[0].f = x;
+	tmp.data[1].f = ratio;
 	return tmp;		
 }
 
 Vector2d<i32> Size::toPixels(Vector2d<i32> parent)
 {
+	const i32& intX = data[0].i;
+	const i32& intY = data[1].i;
+	const f32& floatX = data[0].f;
+	const f32& floatY = data[1].f;
+
 	i32 tmp;
 
 	switch (type) {
 	case Fixed:
-		return Vector2d<i32>(fixed.x, fixed.y);
+		return Vector2d<i32>(intX, intY);
 	case ScalableX:
-		return Vector2d<i32>(i32(parent.x * scalableX.scale), scalableX.coord);
+		return Vector2d<i32>(i32(parent.x * floatX), intY);
 	case ScalableY:
-		return Vector2d<i32>(scalableX.coord, i32(parent.y * scalableX.scale));
+		return Vector2d<i32>(intX, i32(parent.y * floatY));
 	case Scalable:
-		return Vector2d<i32>(i32(parent.x * scalable.x), i32(parent.y * scalable.y));
+		return Vector2d<i32>(i32(parent.x * floatX), i32(parent.y * floatY));
 	case AspectLockedX:
-		i32 tmp = parent.y * aspect.coord;
-		return Vector2d<i32>(i32(tmp * aspect.ratio), tmp);
+		tmp = parent.y * floatY;
+		return Vector2d<i32>(i32(tmp * floatX), tmp);
 	case AspectLockedX:
-		i32 tmp = parent.x * aspect.coord;
-		return Vector2d<i32>(tmp, i32(tmp * aspect.ratio));
+		tmp = parent.x * floatX;
+		return Vector2d<i32>(tmp, i32(tmp * floatY));
 	};
 
-	return Vector2d<i32>;
+	return Vector2d<i32>();
 }
 
 } // namespace gui

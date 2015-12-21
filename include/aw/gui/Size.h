@@ -16,9 +16,9 @@ namespace gui {
  */
 struct Size {
 	/*!
-	 * List of possible Size types.
+	 * List of possible Size format.
 	 */
-	enum Type {
+	enum Format {
 		/*!
 		 * Fixed size is static pixel size.
 		 * It is always same, independent of resolution
@@ -70,31 +70,17 @@ struct Size {
 	Vector2d<i32> toPixels(Vector2d<i32> parent);
 
 private:
-	Size(Type type)
+	Size(Format type)
 		: type(type)
 	{
 	}
 
-	Type type;
 
-	union {
-		struct {
-			i32 x;
-			i32 y;
-		} fixed;
-		struct {
-			i32 coord;
-			f32 scale;
-		} scalableX;
-		struct {
-			f32 x;
-			f32 y;
-		} scalable;
-		struct {
-			f32 coord;
-			f32 ratio;
-		} aspect;
-	};
+	Format type;
+	union fi32 {
+		i32 i;
+		f32 f;
+	} data[2];
 };
 } // namespace gui
 } // namespace aw
