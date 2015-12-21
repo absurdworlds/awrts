@@ -17,7 +17,7 @@ namespace gui {
 class Element : public Canvas {
 public:
 	Element()
-		: parent(nullptr)
+		: parent(nullptr), updateAbsoluteRect(true)
 	{
 	}
 
@@ -45,6 +45,24 @@ public:
 		invalidate();
 	}
 
+	virtual Rect<i32> getAbsoluteRect() const
+	{
+		// Absolute rect needs updating (element moved,
+		// parent moved, etc)
+		if (updateAbsoluteRect)
+			recalculateAbsoluteRect();
+
+		return absoluteRect;
+	}
+
+	/*!
+	 * Causes element's absolute dimensions to be recalculated
+	 */
+	virtual void invalidate()
+	{
+		updateAbsoluteRect = true;
+	}
+
 	/*!
 	 * Get currently applied style. If style is unset, then
 	 * parent's style is returned.
@@ -64,11 +82,17 @@ public:
 	{
 		return parent;
 	}
+protected:
+	void setAbsoluteRect(Rect<i32> r) const
+	{
+		absoluteRect = r;
+		updateAbsoluteRect = false;
+	}
 private:
 	friend void Canvas::addElement(uptr<Element>);
 	friend uptr<Element> Canvas::removeElement(Element*);
 
-	void setParent(Element* newParent)
+	void setParent(Canvas* newParent)
 	{
 		parent = newParent;
 		invalidate();
@@ -80,12 +104,18 @@ private:
 		invalidate();
 	}
 
+	/*!
+	 * This function defines how absolute rect is calculated
+	 */
 	virtual void recalculateAbsoluteRect() const;
 
 	Size position;
 	Size dimensions;
 
-	Element* parent;
+	mutable bool updateAbsoluteRect;
+	mutable Rect<i32> absoluteRect;
+
+	Canvas* parent;
 };
 } // namespace gui
 } // namespace aw

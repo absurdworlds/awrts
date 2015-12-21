@@ -18,39 +18,27 @@
 
 namespace aw {
 namespace gui {
-class Element;
 class Visitor;
+class Element;
+class Style;
 
 //! Base class for GUI elements
 class Canvas : public EventListener {
 public:
 	typedef std::vector<std::unique_ptr<Element>> elements_t;
 
-	Canvas()
-		: updateAbsoluteRect(true)
-	{
-	}
+	Canvas();
 
 	virtual ~Canvas() = default;
  
-	Rect<i32> getAbsoluteRect() const
-	{
-		// Absolute rect needs updating (element moved,
-		// parent moved, etc)
-		if (updateAbsoluteRect)
-			recalculateAbsoluteRect();
-
-		return absoluteRect;
-	}
+	virtual Rect<i32> getAbsoluteRect() const = 0;
 
 	Vector2d<i32> getAbsolutePosition() const
 	{
 		return getAbsoluteRect().getUpperLeft();
 	}
 
-	virtual Rect<i32> getClientRect() const
-	{
-	}
+	virtual Rect<i32> getClientRect() const = 0;
 
 	/*!
 	 * List of flags for hitTest method.
@@ -122,10 +110,7 @@ public:
 	/*!
 	 * Causes element's absolute dimensions to be recalculated
 	 */
-	virtual void invalidate()
-	{
-		updateAbsoluteRect = true;
-	}
+	virtual void invalidate() = 0;
 
 	void setName(std::string name)
 	{
@@ -133,6 +118,7 @@ public:
 
 	std::string getName() const
 	{
+		return "";
 	}
 
 	/*!
@@ -218,25 +204,8 @@ protected:
 	}
 	Element* getElementFromPoint(Vector2d<i32> point, Vector2d<i32> bounds);
 
-	void setAbsoluteRect(Rect<i32> r) const
-	{
-		absoluteRect = r;
-		updateAbsoluteRect = false;
-	}
 private:
-	/*!
-	 * This function defines how absolute rect is calculated
-	 */
-	virtual void recalculateAbsoluteRect() const = 0;
-
-	mutable bool updateAbsoluteRect;
-	mutable Rect<i32> absoluteRect;
-
 	Style* style;
-
-	elements_t::iterator findElement(Element* e);
-	bool processEvent(MouseEvent* event);
-	bool processEvent(GUIEvent* event);
 
 	elements_t elements;
 	Element* active;

@@ -23,6 +23,10 @@ Canvas::elements_t::iterator Canvas::findElement(Element* e)
 	return std::find_if(elements.begin(), elements.end(), compare);
 }
 
+Canvas::Canvas()
+{
+}
+
 void Canvas::addElement(std::unique_ptr<Element> e)
 {
 	core::Logger::debug("[GUI] Canvas: Adding Element");
@@ -78,6 +82,7 @@ Element* Canvas::getActiveElement()
 
 bool Canvas::onEvent(Event* event)
 {
+/*
 	if (event->getType() == MouseEvent::type()) {
 		processEvent(event_cast<MouseEvent>(event));
 	} else if (event->getType() == GUIEvent::type()) {
@@ -90,6 +95,8 @@ bool Canvas::onEvent(Event* event)
 		return false;
 
 	return active->onEvent(event);
+	*/
+	return false;
 }
 
 void Canvas::accept(Visitor& visitor)
@@ -108,7 +115,7 @@ Element* Canvas::getElementFromPoint(Vector2d<i32> point, Vector2d<i32> bounds) 
 	}
 	return element;
 }
-
+/*
 bool Canvas::processEvent(MouseEvent* event)
 {
 	auto bounds = event->bounds;
@@ -176,5 +183,6 @@ bool Canvas::processEvent(GUIEvent* event)
 	}
 	return false;
 }
+*/
 } // namespace gui
 } // namespace aw
