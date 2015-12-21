@@ -87,6 +87,14 @@ struct Size {
 		return Vector2d<i32>(data[0].i, data[1].i);
 	}
 
+	/*!
+	 * Get format of this size.
+	 */
+	Format format() const
+	{
+		return type;
+	}
+
 private:
 	Size(Format type)
 		: type(type)
