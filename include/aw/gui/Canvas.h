@@ -28,32 +28,14 @@ class Canvas : public EventListener {
 public:
 	typedef std::vector<std::unique_ptr<Element>> elements_t;
 
+	Canvas()
+		: updateAbsoluteRect(true)
+	{
+	}
+
 	virtual ~Canvas() = default;
  
-
-	virtual Size getPosition() const
-	{
-		return position;
-	}
-
-	virtual Size getDimensions() const
-	{
-		return dimensions;
-	}
-
-	virtual void setPosition(Size newPosition)
-	{
-		position = newPosition;
-		invalidate();
-	}
-
-	virtual void setDimensions(Size newSize)
-	{
-		dimensions = newSize;
-		invalidate();
-	}
-	
-	virtual Rect<i32> getAbsoluteRect() const
+	Rect<i32> getAbsoluteRect() const
 	{
 		// Absolute rect needs updating (element moved,
 		// parent moved, etc)
@@ -63,7 +45,7 @@ public:
 		return absoluteRect;
 	}
 
-	virtual Vector2d<i32> getAbsolutePosition() const
+	Vector2d<i32> getAbsolutePosition() const
 	{
 		return getAbsoluteRect().getUpperLeft();
 	}
@@ -72,17 +54,41 @@ public:
 	{
 	}
 
+	/*!
+	 * List of flags for hitTest method.
+	 */
+	enum HitTestFlags {
+		TestElement = 0b01,
+		TestChildren = 0b10,
+		TestRecursive = 0b100,
+	};
+
+	/*!
+	 * Test whether point is within element.
+	 * \param flags
+	 * 	- 0b01: will test only element,
+	 * 	- 0b10: will test only children
+	 * 	(by calling hitTest(point, 0b01) for each child),
+	 * 	- 0b11: will test both element and children,
+	 * 	- 0b110: will test children recursively
+	 * 	(by calling hitTest(point 0b111) for each child)
+	 * 	- 0b111: will test element and recursively test children
+	 */
+	bool hitTest(Vector2d<i32> point, HitTestFlags flags = 0b01) const;
+
+	/*!
+	 * Get currently applied style
+	 */
 	virtual Style* getStyle() const
 	{
-		if (!style)
-			return parent->getStyle();
-
 		return style;
 	}
 
-	virtual void setStyle(Style* newStyle)
+	/*!
+	 * Set new style
+	 */
+	void setStyle(Style* newStyle)
 	{
-		// TODO: if newStyle == parent->style, should it be reset to 0?
 		style = newStyle;
 		invalidate();
 	}
@@ -90,13 +96,13 @@ public:
 	/*!
 	 * Add a child element
 	 */
-	virtual void addElement(std::unique_ptr<Element> e);
+	void addElement(std::unique_ptr<Element> e);
 
 	/*!
 	 * Remove child. Returns unique_ptr to detached child,
 	 * allowing to rebind it to different object.
 	 */
-	virtual std::unique_ptr<Element> removeElement(Element* e);
+	std::unique_ptr<Element> removeElement(Element* e);
  
 	/*!
 	 * Get currently active element (which is
@@ -115,6 +121,9 @@ public:
 	 */
 	virtual bool onEvent(Event* event);
 	
+	/*!
+	 * Causes element's absolute dimensions to be recalculated
+	 */
 	virtual void invalidate()
 	{
 		updateAbsoluteRect = true;
@@ -211,33 +220,16 @@ protected:
 	}
 	Element* getElementFromPoint(Vector2d<i32> point, Vector2d<i32> bounds);
 
-private:
-	void recalculateAbsoluteRect() const
+	void setAbsoluteRect(Rect<i32> r) const
 	{
-		if (!getParent()) {
-			/*absoluteRect = TODO */;
-			return;
-		}
-
-		// compute parent rect
-		Rect<i32> parentRect = parent->getAbsoluteRect();
-
-		i32 height = parentRect.getHeight();
-		i32 width  = parentRect.getWidth();
-
-		Vector2d<i32> parentDims(width, height);
-
-		Vector2d<i32> dims = dimensions.toPixels(parentDims);
-		Vector2d<i32> pos = position.toPixels(parentDims);
-
-		absoluteRect.upperLeft = parent->getOrigin() + pos;
-		absoluteRect.lowerRight = upperLeft + dims;
-
+		absoluteRect = r;
 		updateAbsoluteRect = false;
 	}
-
-	Size position;
-	Size dimensions;
+private:
+	/*!
+	 * This function defines how absolute rect is calculated
+	 */
+	virtual void recalculateAbsoluteRect() const = 0;
 
 	mutable bool updateAbsoluteRect;
 	mutable Rect<i32> absoluteRect;

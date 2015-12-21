@@ -20,11 +20,46 @@ namespace gui {
 class Element : public Canvas {
 public:
 	Element()
-		: parent(nullptr), updateAbsoluteRect(true)
+		: parent(nullptr)
 	{
 	}
+
 	virtual ~Element() = default;
 
+	Size getPosition() const
+	{
+		return position;
+	}
+
+	Size getDimensions() const
+	{
+		return dimensions;
+	}
+
+	void setPosition(Size newPosition)
+	{
+		position = newPosition;
+		invalidate();
+	}
+
+	void setDimensions(Size newSize)
+	{
+		dimensions = newSize;
+		invalidate();
+	}
+
+	/*!
+	 * Get currently applied style. If style is unset, then
+	 * parent's style is returned.
+	 */
+	virtual Style* getStyle() const final
+	{
+		if (!style)
+			return parent->getStyle();
+
+		return style;
+	}
+	
 	/*!
 	 * Returns pointer to parent element.
 	 */
@@ -32,6 +67,9 @@ public:
 	{
 		return parent;
 	}
+private:
+	friend void Canvas::addElement(uptr<Element>);
+	friend uptr<Element> Canvas::removeElement(Element*);
 
 	void setParent(Element* newParent)
 	{
@@ -44,19 +82,14 @@ public:
 		parent = nullptr;
 		invalidate();
 	}
-private:
+
+	virtual void recalculateAbsoluteRect() const;
+
+	Size position;
+	Size dimensions;
+
 	Element* parent;
 };
-
-inline bool pointWithinElement(Vector2d<i32> point,
-                               Element const& element,
-                               Vector2d<i32> screen)
-{
-	auto rect = element.getAbsoluteRect();
-	Rect<i32> screenRect = toPixels(rect, screen);
-	return pointWithinRect(point, screenRect);
-}
-
 } // namespace gui
 } // namespace aw
 #endif //_aw_GUIElement_
