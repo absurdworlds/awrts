@@ -7,9 +7,10 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <aw/utility/range_adaptors.h>
-#include <aw/gui/Canvas.h>
 #include <aw/gui/Visitor.h>
 #include <aw/core/Logger.h>
+#include <aw/gui/Canvas.h>
+#include <aw/gui/Element.h>
 
 namespace aw {
 namespace gui {

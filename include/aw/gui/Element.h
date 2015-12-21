@@ -7,13 +7,10 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_GUIElement_
-#define _aw_GUIElement_
-#include <string>
-
+#ifndef aw_gui_Element_h
+#define aw_gui_Element_h
+#include <aw/gui/Size.h>
 #include <aw/gui/Canvas.h>
-#include <aw/core/Logger.h>
-
 namespace aw {
 namespace gui {
 //! Base class for GUI elements

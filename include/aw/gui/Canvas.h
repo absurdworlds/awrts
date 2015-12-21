@@ -9,14 +9,12 @@
  */
 #ifndef aw_gui_Canvas_h
 #define aw_gui_Canvas_h
+#include <string>
 #include <aw/common/types.h>
-#include <aw/math/Rect.h>
-#include <aw/common/EventListener.h>
 #include <aw/utility/iterators/Wrapper.h>
+#include <aw/math/Rect.h>
 
-#include <aw/gui/KeyboardEvent.h>
-#include <aw/gui/MouseEvent.h>
-#include <aw/gui/GUIEvent.h>
+#include <aw/common/EventListener.h>
 
 namespace aw {
 namespace gui {
