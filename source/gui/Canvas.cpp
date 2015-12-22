@@ -120,10 +120,11 @@ void Canvas::accept(Visitor& visitor)
 	visitor.visit(this);
 }
 
+
 Element* Canvas::getElementFromPoint(Vector2d<i32> point, Vector2d<i32> bounds) {
 	Element* element = nullptr;
 	for (auto& e : make_reverse(elements)) {
-		bool within = pointWithinElement(point, *e, bounds);
+		bool within = e->hitTest(point, TestSelf);
 		if (within) {
 			element = e.get();
 			break;
