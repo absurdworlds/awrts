@@ -83,8 +83,8 @@ Element* Canvas::getActiveElement()
 bool Canvas::broadcast(Event* event)
 {
 	bool consumed;
-	for (auto e& : elements) {
-		consumed = e->onEvent(event);
+	for (auto& elem : elements) {
+		consumed = elem->onEvent(event);
 
 		if (consumed)
 			return true;
