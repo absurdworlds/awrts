@@ -12,32 +12,39 @@
 namespace aw {
 class Event {
 public:
-	virtual bool is(size_t id) = 0;
-	virtual size_t getType() = 0;
+	bool is(size_t id)
+	{
+		return type == id;
+	}
+
+	virtual size_t getType()
+	{
+		return type;
+	}
 protected:
 	static size_t eventTypes;
+
+	Event(size_t type)
+		: type(type)
+	{
+	}
+private:
+	size_t type;
 };
 
 template <class Derived>
 class EventId : public Event {
 public:
-	static size_t type() {
-		static size_t id = eventTypes++;
-		return id;
-	}
-
-	virtual bool is(size_t id)
-	{
-		return type() == id;
-	}
-
-	virtual size_t getType() {
-		return type();
+	static size_t id() {
+		static size_t type = eventTypes++;
+		return type;
 	}
 protected:
 	EventId<Derived>()
+		: Event(id())
 	{
 	}
+private:
 };
 
 template <class E>
