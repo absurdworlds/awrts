@@ -2,7 +2,7 @@
 
 #include <Irrlicht/IrrlichtDevice.h>
 
-#include <aw/gui/Canvas.h>
+#include <aw/gui/Element.h>
 #include <aw/gui/Window.h>
 #include <aw/gui/Drawer.h>
 #include <aw/core/Logger.h>
@@ -12,7 +12,6 @@
 
 #include <iostream>
 
-using namespace irr;
 namespace irr {
 extern "C" IRRLICHT_API IrrlichtDevice* IRRCALLCONV createDevice(
 	video::E_DRIVER_TYPE deviceType = video::EDT_SOFTWARE,
@@ -36,68 +35,44 @@ public:
 };
 
 namespace gui {
-
-
+// All sruff happens here
 int guimain()
 {
+	/* Init logger*/
 	Couter cou;
 	core::Logger* log = core::createLogger();
 	log->registerLog(&cou);
 	core::Logger::setGlobalLogger(log);
-	IrrlichtDevice * device = createDevice(video::EDT_OPENGL,
-			irr::core::dimension2d<u32>(800, 600));
+
+	/* Init Irrlicht */
+	IrrlichtDevice* device = createDevice(
+	                  video::EDT_OPENGL,
+	                  irr::core::dimension2d<u32>(800, 600));
 	auto driver = device->getVideoDriver();
 	auto input = std::make_unique<impl::InputManager>(device);
-	std::unique_ptr<Engine> engine = std::make_unique<IrrEngine>(driver);
-	std::unique_ptr<Canvas> canvas = std::make_unique<Canvas>();
-	std::unique_ptr<Style> style = std::make_unique<Style>();
-	canvas->setStyle(style.get());
-	style->getElementStyle("window");
-	canvas->setName("c");
 
-	canvas->setRect(Rect<Coordinate>(0.0,0.0,1.0,1.0));
-	input->registerReceiver(canvas.get());
-
-	auto window = std::make_unique<Window>();
-	auto t = window.get();
-	window->setRect(Rect<Coordinate>(0.1,0.1,0.9,0.9));
-	//window->setRect(Rect<Coordinate>(0.1,0.1,0.4,0.4));
-	/*
-	window->setRect(Rect<Coordinate>(Coordinate(0.1,5),
-				Coordinate(0.1,5),
-				Coordinate(0.4,-5),
-				Coordinate(0.4,-5)));
-	//			*/
-	canvas->addElement(std::move(window));
-	auto tt = &*canvas->getFirstChild();
-	tt->setName("w");
-
-	if (tt == t)
-		log->push("heey");
-	log->push("window1: " + std::to_string((size_t)t));
-
-	auto window2 = std::make_unique<Window>();
-	log->push("window2: " + std::to_string((size_t)window2.get()));
-	window2->setDraggable(true);
-	window2->setRect(Rect<Coordinate>(0.5,0.5,0.9,0.9));
-	window2->setName("x");
-	t->addElement(std::move(window2));
-
-	window2 = std::make_unique<Window>();
-	log->push("window3: " + std::to_string((size_t)window2.get()));
-	window2->setDraggable(true);
-	window2->setRect(Rect<Coordinate>(0.1,0.1,0.4,0.4));
-	window2->setName("x");
-	t->addElement(std::move(window2));
-
-	window2 = std::make_unique<Window>();
-	log->push("window4: " + std::to_string((size_t)window2.get()));
-	window2->setDraggable(true);
-	window2->setRect(Rect<Coordinate>(0.6,0.1,0.95,0.4));
-	window2->setName("x");
-	t->addElement(std::move(window2));
+	/* Init basic gui stuff */
+	uptr<Engine> engine = std::make_unique<IrrEngine>(driver);
 	Drawer drawer(*engine);
 
+	uptr<Style> style = std::make_unique<Style>();
+	Screen canvas = Screen(driver);
+
+	canvas->setStyle(style.get());
+	input->registerReceiver(canvas.get());
+
+	/* Create simple window */
+	auto window = std::make_unique<Element>("window");
+	window->setPosition(Size::makeScalable(0.1,0.1));
+	window->setDimensions(Size::makeAspectLockedX(0.8,1.0));
+
+	auto window_ptr = window.get();
+	canvas->addElement(std::move(window));
+
+	assert(&*canvas->begin() == window_ptr);
+
+
+	/* Run stuff */
 	while(device->run() && driver)
 	if (device->isWindowActive()) {
 		driver->beginScene(true, true, irr::video::SColor(255,40,138,155));
