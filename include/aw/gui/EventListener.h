@@ -22,7 +22,7 @@ public:
 
 	bool onEvent(Event* event)
 	{
-		auto handler = getHandler(event.getType());
+		auto handler = getHandler(event->getType());
 
 		if (handler)
 			return handler.value()(event);
