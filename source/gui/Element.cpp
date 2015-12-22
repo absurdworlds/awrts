@@ -42,8 +42,8 @@ virtual void Element::recalculateAbsoluteRect() const
 	Vector2d<i32> pos = getPosition().toPixels(parentDims);
 
 	Rect<i32> tmp;
-	tmp.upperLeft = parent->getOrigin() + pos;
-	tmp.lowerRight = upperLeft + dims;
+	tmp.upperLeft = parent->getAbsolutePosition() + pos;
+	tmp.lowerRight = tmp.upperLeft + dims;
 
 	setAbsoluteRect(tmp);
 
