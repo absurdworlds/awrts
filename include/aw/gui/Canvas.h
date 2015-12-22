@@ -14,7 +14,7 @@
 #include <aw/utility/iterators/Wrapper.h>
 #include <aw/math/Rect.h>
 
-#include <aw/common/EventListener.h>
+#include <aw/gui/EventListener.h>
 
 namespace aw {
 namespace gui {

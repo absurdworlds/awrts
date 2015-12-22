@@ -11,8 +11,7 @@
 #include <functional>
 
 #include <aw/common/types.h>
-#include <aw/common/Event.h>
-#include <aw/gui/Element.h>
+#include <aw/gui/Event.h>
 namespace aw {
 namespace gui {
 

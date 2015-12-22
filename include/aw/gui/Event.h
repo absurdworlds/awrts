@@ -6,12 +6,15 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_common_Event_
-#define _aw_common_Event_
+#ifndef _aw_gui_Event_
+#define _aw_gui_Event_
 #include <aw/common/types.h>
 namespace aw {
+namespace gui {
 class Event {
 public:
+	typedef size_t ID;
+
 	bool is(size_t id)
 	{
 		return type == id;
@@ -54,5 +57,6 @@ E* event_cast(Event* event) {
 
 	return nullptr;
 }
+} // namespace gui
 } // namespace aw
-#endif //_aw_common_Event_
+#endif //_aw_gui_Event_
