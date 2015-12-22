@@ -9,6 +9,7 @@
 #ifndef aw_gui_EventHandler
 #define aw_gui_EventHandler
 #include <functional>
+#include <unordered_map>
 
 #include <aw/common/types.h>
 #include <aw/gui/Event.h>
