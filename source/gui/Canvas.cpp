@@ -14,13 +14,16 @@
 
 namespace aw {
 namespace gui {
-Canvas::elements_t::iterator Canvas::findElement(Element* e)
+namespace {
+Canvas::elements_t::iterator
+findElementImpl(Canvas::elements_t& elements, Element* e)
 {
-	auto compare = [&e] (std::unique_ptr<Element>& ptr) {
+	auto compare = [&e] (uptr<Element>& ptr) {
 		return ptr.get() == e;
 	};
 
 	return std::find_if(elements.begin(), elements.end(), compare);
+}
 }
 
 Canvas::Canvas()
@@ -38,7 +41,7 @@ std::unique_ptr<Element> Canvas::removeElement(Element* e)
 {
 	core::Logger::debug("[GUI] Canvas: Removing Element");
 
-	auto element = findElement(e);
+	auto element = findElementImpl(elements, e);
 
 	if (element == elements.end())
 		return nullptr;
@@ -53,7 +56,7 @@ std::unique_ptr<Element> Canvas::removeElement(Element* e)
 
 void Canvas::bringToFront(Element* e)
 {
-	auto element = findElement(e);
+	auto element = findElementImpl(elements, e);
 	
 	if (element == elements.end())
 		return;
@@ -65,7 +68,7 @@ void Canvas::bringToFront(Element* e)
 
 void Canvas::sendToBack(Element* e)
 {
-	auto element = findElement(e);
+	auto element = findElementImpl(elements, e);
 	
 	if (element == elements.end())
 		return;
