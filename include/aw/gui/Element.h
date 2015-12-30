@@ -106,6 +106,9 @@ private:
 		invalidate();
 	}
 
+	std::string elementClass;
+	std::string suffix;
+
 	/*!
 	 * This function defines how absolute rect is calculated
 	 */
