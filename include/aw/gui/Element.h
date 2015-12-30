@@ -61,6 +61,7 @@ public:
 	virtual void invalidate()
 	{
 		updateAbsoluteRect = true;
+		updateClientRect = true;
 	}
 
 	/*!
@@ -110,11 +111,19 @@ private:
 	 */
 	virtual void recalculateAbsoluteRect() const;
 
+	/*!
+	 * This function defines how client rect is calculated
+	 */
+	virtual void recalculateClientRect() const;
+
 	Size position;
 	Size dimensions;
 
 	mutable bool updateAbsoluteRect;
 	mutable Rect<i32> absoluteRect;
+
+	mutable bool updateClientRect;
+	mutable Rect<i32> clientRect;
 
 	Canvas* parent;
 };
