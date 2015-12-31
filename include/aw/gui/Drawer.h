@@ -1,4 +1,5 @@
 /*
+ * Copyright (C) 2015 absurdworlds
  * Copyright (C) 2015 hedede <haddayn@gmail.com>
  *
  * License LGPLv3 or later:
@@ -6,8 +7,8 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_gui_drawer_
-#define _aw_gui_drawer_
+#ifndef aw_gui_Drawer_h
+#define aw_gui_Drawer_h
 #include <aw/gui/Visitor.h>
 
 namespace aw {
@@ -23,17 +24,14 @@ public:
 	}
 	virtual ~Drawer();
 
-	virtual void visit(Element* element);
-	virtual void visit(Canvas* element);
-	virtual void visit(Window* element);
-	virtual void visit(Widget* element);
-	virtual void visit(Button* element);
+	virtual void visit(Canvas& canvas);
+	virtual void visit(Element& element);
 private:
-	void drawChildren(Canvas* element);
+	void drawChildren(Canvas& element);
 
 	Engine& engine;
 };
 
 } // namespace gui
 } // namespace aw
-#endif //_aw_gui_drawer_
+#endif //aw_gui_Drawer_h

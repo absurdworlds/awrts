@@ -37,53 +37,22 @@ Drawer::~Drawer()
 {
 }
 
-void Drawer::visit(Element* element)
-{
-}
-
-void Drawer::visit(Canvas* element)
+void Drawer::visit(Canvas& element)
 {
 	//Skin* skin = element->getSkin();
 	//skin->drawCanvas(element->getRect());
 	drawChildren(element);
 }
 
-void Drawer::visit(Window* element)
+void Drawer::visit(Element& element)
 {
-	auto style = getStyle(element->getStyle(), "window");
-
-	engine.drawBorder(element->getAbsoluteRect(),
-	                  style->getBorderStyle());
-
-	engine.drawBackground(element->getClientRect(),
-	                      style->getBackgroundStyle());
-
-	//if (element->hasTitleBar()) {
-	//}
+	drawStyle(element);
 	drawChildren(element);
 }
 
-void Drawer::visit(Widget* element)
+void Drawer::drawChildren(Canvas& canvas)
 {
-	core::Logger::debug("[GUI] Drawer: Unknown Widget");
-}
-
-void Drawer::visit(Button* button)
-{
-	auto style = getStyle(button->getStyle(),
-	                      button->isPressed() ?
-	                      "buttonPressed" : "button");
-
-	engine.drawBackground(button->getClientRect(),
-	                      style->getBackgroundStyle());
-	engine.drawBorder(button->getAbsoluteRect(),
-	                  style->getBorderStyle());
-}
-
-// TODO: replace pointer with reference
-void Drawer::drawChildren(Canvas* element)
-{
-	for (auto& e : element) {
+	for (auto& e : canvas) {
 		e.accept(*this);
 	}
 }
