@@ -13,7 +13,7 @@
 
 namespace aw {
 namespace gui {
-virtual void Element::recalculateAbsoluteRect() const
+void Element::recalculateAbsoluteRect() const
 {
 	bool isFixed = getDimensions().format() == Size::Fixed &&
 	               getPosition().format() == Size::Fixed;
