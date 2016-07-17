@@ -11,23 +11,35 @@
 #include <chrono>
 #include <ratio>
 
+#include <awrts/logging.h>
+#include <aw/logger/OstreamLogger.h>
 #include <aw/types/types.h>
 
 namespace aw {
 namespace rts {
 void update()
 {
+	log.log(Log::Info, "update()", "Running update.");
 	// run game logic
 	// run physics
 }
 
 void render()
 {
+	log.log(Log::Info, "render()", "Rendering frame.");
 	// send data to renderer process
 }
 
 int main(int c, char const* const* v)
 {
+	OstreamLogger os{std::cout};
+	log_impl.add(os);
+	log.setLogger(&log_impl);
+
+	log.log(Log::Info, "main()", "Initialized logger.");
+
+	log.log(Log::Info, "main()", "Setting up main loop.");
+
 	bool run = true;
 
 	// unsure: is it ‘good enough’ to ditch hrengin::getTime()?
@@ -44,6 +56,7 @@ int main(int c, char const* const* v)
 	constexpr size_t   ticks     = 60;
 	constexpr Duration tick_time = duration_cast<Duration>(1s) / ticks;
 
+	log.log(Log::Info, "main()", "Main loop start.");
 	// std::cout << tick_time.count() << "\n";
 
 	Duration elapsed = 0ns;
@@ -70,6 +83,10 @@ int main(int c, char const* const* v)
 
 		render();
 	}
+
+	log.log(Log::Info, "main()", "Main loop end.");
+
+	log.log(Log::Info, "main()", "Exiting.");
 }
 
 } // namespace rts
