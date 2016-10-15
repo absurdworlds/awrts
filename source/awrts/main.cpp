@@ -42,42 +42,42 @@ int main(int c, char const* const* v)
 
 	bool run = true;
 
-	// unsure: is it ‘good enough’ to ditch hrengin::getTime()?
-	// (hrengin::getTime() is implemented identically to
-	// libstc++ and libcxx verison of std::chrono::steady_clock())
-	auto time      = std::chrono::high_resolution_clock::now();
-	auto prev_time = time;
-
-	using Duration = std::chrono::duration<u64, std::nano>;
-
 	using namespace std::chrono;
 	using namespace std::chrono_literals;
 
-	constexpr size_t   ticks     = 60;
-	constexpr Duration tick_time = duration_cast<Duration>(1s) / ticks;
+	constexpr intmax_t ticks_per_sec = 60;
+	using tick_rate = std::ratio<1, ticks_per_sec>;
+	using ticks = duration<i64, tick_rate>;
 
 	journal.info("main()", "Main loop start.");
 	// std::cout << tick_time.count() << "\n";
 
-	Duration elapsed = 0ns;
+	nanoseconds elapsed = 0ns;
+
+	// TODO:
+	// std::chrono::steady_clock() vs high_resolution_clock
+	auto time      = high_resolution_clock::now();
+	auto prev_time = time;
 
 	while (run) {
 		prev_time = time;
-		time = std::chrono::high_resolution_clock::now();
+		time = high_resolution_clock::now();
 
-		Duration diff = duration_cast<Duration>(time - prev_time);
+		nanoseconds diff = time - prev_time;
 
 		// if too much lag occurs, drop frames
-		if (diff > 10*tick_time)
-			diff = 10*tick_time;
+		if (diff > ticks{10}) {
+			diff = duration_cast<nanoseconds>(ticks{10});
+			journal.warning("main()", "Too much time elapsed since last frame, dropping frames.");
+		}
 
 		auto val = diff.count();
-		// std::cout << val << " " << tick_time.count() << "\n";
+		//std::cout << val << " " << duration_cast<nanoseconds>(ticks{1}).count() << "\n";
 
 		elapsed += diff;
 
-		while (elapsed >= tick_time) {
-			elapsed -= tick_time;
+		while (elapsed >= ticks{1}) {
+			elapsed -= duration_cast<nanoseconds>(ticks{1});
 			update();
 		}
 
