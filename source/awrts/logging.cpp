@@ -8,11 +8,11 @@
  * There is NO WARRANTY, to the extent permitted by law.
  */
 #include <awrts/logging.h>
-#include <aw/logger/OstreamLogger.h>
+#include <aw/log/ostream_logger.h>
 namespace aw {
 namespace rts {
-LogProvider log;
+log_provider journal;
 
-LogFilter log_impl;
+log_filter log_impl;
 } // namespace rts
 } // namespace aw

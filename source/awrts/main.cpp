@@ -12,33 +12,33 @@
 #include <ratio>
 
 #include <awrts/logging.h>
-#include <aw/logger/OstreamLogger.h>
+#include <aw/log/ostream_logger.h>
 #include <aw/types/types.h>
 
 namespace aw {
 namespace rts {
 void update()
 {
-	log.log(Log::Info, "update()", "Running update.");
+	journal.info("update()", "Running update.");
 	// run game logic
 	// run physics
 }
 
 void render()
 {
-	log.log(Log::Info, "render()", "Rendering frame.");
+	journal.info("render()", "Rendering frame.");
 	// send data to renderer process
 }
 
 int main(int c, char const* const* v)
 {
-	OstreamLogger os{std::cout};
+	ostream_logger os{std::cout};
 	log_impl.add(os);
-	log.setLogger(&log_impl);
+	journal.set_logger(&log_impl);
 
-	log.log(Log::Info, "main()", "Initialized logger.");
+	journal.info("main()", "Initialized logger.");
 
-	log.log(Log::Info, "main()", "Setting up main loop.");
+	journal.info("main()", "Setting up main loop.");
 
 	bool run = true;
 
@@ -56,7 +56,7 @@ int main(int c, char const* const* v)
 	constexpr size_t   ticks     = 60;
 	constexpr Duration tick_time = duration_cast<Duration>(1s) / ticks;
 
-	log.log(Log::Info, "main()", "Main loop start.");
+	journal.info("main()", "Main loop start.");
 	// std::cout << tick_time.count() << "\n";
 
 	Duration elapsed = 0ns;
@@ -84,9 +84,9 @@ int main(int c, char const* const* v)
 		render();
 	}
 
-	log.log(Log::Info, "main()", "Main loop end.");
+	journal.info("main()", "Main loop end.");
 
-	log.log(Log::Info, "main()", "Exiting.");
+	journal.info("main()", "Exiting.");
 }
 
 } // namespace rts

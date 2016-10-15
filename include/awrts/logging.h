@@ -9,13 +9,13 @@
  */
 #ifndef awrts_logging_h
 #define awrts_logging_h
-#include <aw/logger/LogProvider.h>
-#include <aw/logger/LogFilter.h>
+#include <aw/log/log_provider.h>
+#include <aw/log/log_filter.h>
 namespace aw {
 namespace rts {
-extern LogProvider log;
+extern log_provider journal;
 
-extern LogFilter log_impl;
+extern log_filter log_impl;
 } // namespace rts
 } // namespace aw
 #endif//awrts_logging_h
