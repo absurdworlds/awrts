@@ -41,17 +41,13 @@ VideoManager::VideoManager(core::SettingsManager* settings)
 		settings->getValue("graphics.resolutionY",resolutionY);
 		settings->getValue("graphics.fullscreen",fullscreen);
 	}
-	device_ = irr::createDevice( irr::video::EDT_OPENGL, irr::core::dimension2d<irr::u32>(resolutionX, resolutionY), 32, fullscreen, true, true, 0);
+	device_ = irr::createDevice(, , 32, fullscreen, true, true, 0);
 
 	device_->setWindowCaption(L"aw A - Irrlicht 1.8.1");
 
 	renderer_ = new RenderingDevice(device_->getVideoDriver());
 	sceneManager_ = new scene::SceneManager(device_->getSceneManager(), renderer_, device_);
 	guiManager_ = new gui::GUIManager(device_->getGUIEnvironment(), device_);
-
-#ifdef HR_WINDOWS
-	settings->setValue("platform.win32.wndHandle", reinterpret_cast<i32>(device_->getVideoDriver()->getExposedVideoData().OpenGLWin32.HWnd));
-#endif
 }
 
 VideoManager::~VideoManager() 

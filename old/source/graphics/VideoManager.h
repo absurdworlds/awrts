@@ -20,18 +20,6 @@
 
 #include "VisNode.h"
 
-namespace irr {
-class IrrlichtDevice;
-namespace video {
-class VideoDriver;
-}
-namespace scene {
-class SceneManager;
-class AnimatedMesh;
-class SceneCollisionManager;
-}
-} // namespace irr
-
 namespace aw {
 namespace gui {
 class GUIManager;
@@ -43,7 +31,6 @@ friend class Encore;
 friend class GUIManager;
 public:
 	VideoManager(core::SettingsManager* settings);
-	virtual ~VideoManager();
 	
 	virtual bool step();
 	virtual void wait();
@@ -55,11 +42,8 @@ public:
 	virtual gui::GUIManager* getGUIManager() const;
 
 	//virtual Mesh* loadMesh(const char * modelname);
-	virtual u32 getTime();
 
 private:
-	irr::IrrlichtDevice* device_;
-
 	scene::SceneManager* sceneManager_;
 	RenderingDevice* renderer_;
 	gui::GUIManager* guiManager_;
