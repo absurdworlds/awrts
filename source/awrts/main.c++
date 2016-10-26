@@ -11,9 +11,11 @@
 #include <chrono>
 #include <ratio>
 
+#include <aw/types/types.h>
+
 #include <awrts/logging.h>
 #include <aw/log/ostream_logger.h>
-#include <aw/types/types.h>
+#include <aw/log/ml_raii_wrapper.h>
 
 namespace aw {
 namespace rts {
@@ -30,15 +32,12 @@ void render()
 	// send data to renderer process
 }
 
-int main(int c, char const* const* v)
-{
-	ostream_logger os{std::cout};
-	log_impl.add(os);
-	journal.set_logger(&log_impl);
 
-	journal.info("main()", "Initialized logger.");
+int run_game(int c, char const* const* v)
+{
 
 	journal.info("main()", "Setting up main loop.");
+
 
 	bool run = true;
 
@@ -89,8 +88,28 @@ int main(int c, char const* const* v)
 	journal.info("main()", "Exiting.");
 }
 
+int main(int c, char const* const* v)
+{
+	raii_log<ostream_logger> os{log_impl, std::cout};
+
+	journal.set_logger(&log_impl);
+	journal.info("main()", "Initialized logger.");
+
+	try {
+		return run_game(c,v);
+	} catch( std::exception& ex ) {
+		journal.fatal("main()", "caught exception:");
+		journal.fatal("main()", ex.what());
+
+		dump_core();
+
+		return EXIT_FAILURE;
+	}
+}
+
 } // namespace rts
 } // namespace aw
+
 
 int main(int c, char** v)
 {
