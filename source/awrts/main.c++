@@ -17,6 +17,8 @@
 #include <aw/log/ostream_logger.h>
 #include <aw/log/ml_raii_wrapper.h>
 
+#include <awrts/graphics/video_manager.h>
+
 namespace aw {
 namespace rts {
 void update()
@@ -35,6 +37,11 @@ void render()
 
 int run_game(int c, char const* const* v)
 {
+	journal.info("main()", "Initializing graphics subsystem.");
+
+
+	graphics::video_manager video{1066, 600, false, true};
+
 
 	journal.info("main()", "Setting up main loop.");
 
