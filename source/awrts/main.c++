@@ -28,10 +28,25 @@ void update()
 	// run physics
 }
 
-void render()
+void init_video(graphics::video_manager& video)
+{
+	video.set_window_caption("AW RTS [v0.0.0.0]");
+}
+
+
+bool render(graphics::video_manager& video)
 {
 	journal.info("render()", "Rendering frame.");
 	// send data to renderer process
+	if (!video.run())
+		return false;
+
+	if (video.is_window_active()) {
+		video.begin_render();
+		video.end_render();
+	}
+
+	return true;
 }
 
 
@@ -41,7 +56,7 @@ int run_game(int c, char const* const* v)
 
 
 	graphics::video_manager video{1066, 600, false, true};
-
+	init_video(video);
 
 	journal.info("main()", "Setting up main loop.");
 
@@ -87,7 +102,7 @@ int run_game(int c, char const* const* v)
 			update();
 		}
 
-		render();
+		run = render(video);
 	}
 
 	journal.info("main()", "Main loop end.");

@@ -13,6 +13,7 @@
 
 #include <aw/config.h>
 
+#include <Irrlicht/ISceneManager.h>
 #if (AW_PLATFORM == AW_PLATFORM_WIN32)
 #include <Irrlicht/CIrrDeviceWin32.h>
 #elif (AW_PLATFORM_SPECIFIC == AW_PLATFORM_OSX)
@@ -84,9 +85,24 @@ video_manager::~video_manager()
 	dev->drop();
 }
 
-bool video_manager::render()
+bool video_manager::run()
 {
 	return dev->run();
+}
+
+void video_manager::begin_render()
+{
+	auto* renderer = dev->getVideoDriver();
+	auto* scenemgr = dev->getSceneManager();
+
+	renderer->beginScene();
+	scenemgr->drawAll();
+}
+
+void video_manager::end_render()
+{
+	auto* renderer = dev->getVideoDriver();
+	renderer->endScene();
 }
 
 bool video_manager::is_window_active()

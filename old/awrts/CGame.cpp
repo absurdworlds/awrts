@@ -38,7 +38,6 @@ CGame::CGame ()
 {
 	shell_ = core::createShell(logger_);
 
-	videomgr_ = graphics::createVideoManager(settings_);
 	scenemgr_ = videomgr_->getSceneManager();
 	renderer_ = videomgr_->getRenderingDevice();
 
@@ -111,13 +110,11 @@ bool CGame::run ()
 		}
 #endif
 
-		runEngine = videomgr_->step();
-		if(!runEngine) {
+		if(!videomgr_->step())
 			break;
-		}
+
 		if(videomgr_->isWindowActive()) {
 			renderer_->beginRender();
-			scenemgr_->drawScene();
 			renderer_->drawDebug();
 			settings_->getValue("debugmode", debugMode);
 			if(debugMode) {
@@ -126,9 +123,7 @@ bool CGame::run ()
 				renderer_->drawLine(Vector3d<f32>(0,0.01f,0),Vector3d<f32>(10, 0.01f,0),Vector3d<f32>(255,0,0));
 				drawer_->render();
 			}
-			guimgr_->draw();
-			eventmgr_->advance();
-			renderer_->endRender();
+			renderer_->endRender();	
 		} else {
 			videomgr_->wait();
 		}

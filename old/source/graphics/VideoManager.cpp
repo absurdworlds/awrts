@@ -41,20 +41,11 @@ VideoManager::VideoManager(core::SettingsManager* settings)
 		settings->getValue("graphics.resolutionY",resolutionY);
 		settings->getValue("graphics.fullscreen",fullscreen);
 	}
-	device_ = irr::createDevice(, , 32, fullscreen, true, true, 0);
-
-	device_->setWindowCaption(L"aw A - Irrlicht 1.8.1");
 
 	renderer_ = new RenderingDevice(device_->getVideoDriver());
 	sceneManager_ = new scene::SceneManager(device_->getSceneManager(), renderer_, device_);
 	guiManager_ = new gui::GUIManager(device_->getGUIEnvironment(), device_);
 }
-
-VideoManager::~VideoManager() 
-{
-	device_->drop();
-};
-
 
 RenderingDevice* VideoManager::getRenderingDevice() const
 {
@@ -72,37 +63,6 @@ gui::GUIManager* VideoManager::getGUIManager() const
 	return guiManager_;
 }
 
-u32 VideoManager::getTime()
-{
-	static irr::ITimer* timer(device_->getTimer());
-	return timer->getTime();
-}
-
-bool VideoManager::step()
-{
-	if (device_->run()) {
-		return true;
-	} else {
-		return false;
-	}
-	
-}
-
-void VideoManager::wait()
-{
-	device_->yield();
-}
-
-bool VideoManager::isWindowActive()
-{
-	return device_->isWindowActive();
-}
-
-#if 0
-void VideoManager::setWindowCaption(std::wstring newCaption)
-{
-	caption_ = newCaption.c_str();
-}
 
 void VideoManager::updateCaption()
 {
@@ -131,7 +91,6 @@ void VideoManager::showCaptionFPS(bool showFps)
 {
 	showFps_ = showFps;
 }
-#endif
 
 } // namespace graphics
 } // namespace aw

@@ -99,10 +99,6 @@ EntityNode* SceneManager::createEntitySceneNode(Entity* entity)
 	return 0;
 }
 
-void SceneManager::drawScene()
-{
-	scnmgr->drawAll();
-}
 
 //irr::scene::IAnimatedMesh* CVideoManager::LoadMesh(const char* modelname)
 irr::scene::IAnimatedMesh* CSceneManager::convertMesh(const char* modelname)
