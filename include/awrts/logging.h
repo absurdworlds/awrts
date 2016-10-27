@@ -16,6 +16,9 @@ namespace rts {
 extern log_provider journal;
 
 extern log_filter log_impl;
+
+void dump_core();
+void log_and_abort();
 } // namespace rts
 } // namespace aw
 #endif//awrts_logging_h
