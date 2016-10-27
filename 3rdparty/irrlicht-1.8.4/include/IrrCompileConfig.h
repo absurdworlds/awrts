@@ -50,11 +50,6 @@
 #undef _IRR_COMPILE_WITH_SDL_DEVICE_
 #endif
 
-//! Comment this line to compile without the fallback console device.
-#define _IRR_COMPILE_WITH_CONSOLE_DEVICE_
-#ifdef NO_IRR_COMPILE_WITH_CONSOLE_DEVICE_
-#undef _IRR_COMPILE_WITH_CONSOLE_DEVICE_
-#endif
 
 //! WIN32 for Windows32
 //! WIN64 for Windows64
@@ -145,17 +140,6 @@ If not defined, Windows Multimedia library is used, which offers also broad supp
 #undef _IRR_COMPILE_WITH_DIRECTINPUT_JOYSTICK_
 #endif
 
-//! Only define _IRR_COMPILE_WITH_DIRECT3D_8_ if you have an appropriate DXSDK, e.g. Summer 2004
-// #define _IRR_COMPILE_WITH_DIRECT3D_8_
-#define _IRR_COMPILE_WITH_DIRECT3D_9_
-
-#ifdef NO_IRR_COMPILE_WITH_DIRECT3D_8_
-#undef _IRR_COMPILE_WITH_DIRECT3D_8_
-#endif
-#ifdef NO_IRR_COMPILE_WITH_DIRECT3D_9_
-#undef _IRR_COMPILE_WITH_DIRECT3D_9_
-#endif
-
 #endif
 
 //! Define _IRR_COMPILE_WITH_OPENGL_ to compile the Irrlicht engine with OpenGL.
@@ -166,20 +150,7 @@ define out. */
 #undef _IRR_COMPILE_WITH_OPENGL_
 #endif
 
-//! Define _IRR_COMPILE_WITH_SOFTWARE_ to compile the Irrlicht engine with software driver
-/** If you do not need the software driver, or want to use Burning's Video instead,
-comment this define out */
-#define _IRR_COMPILE_WITH_SOFTWARE_
-#ifdef NO_IRR_COMPILE_WITH_SOFTWARE_
-#undef _IRR_COMPILE_WITH_SOFTWARE_
-#endif
 
-//! Define _IRR_COMPILE_WITH_BURNINGSVIDEO_ to compile the Irrlicht engine with Burning's video driver
-/** If you do not need this software driver, you can comment this define out. */
-#define _IRR_COMPILE_WITH_BURNINGSVIDEO_
-#ifdef NO_IRR_COMPILE_WITH_BURNINGSVIDEO_
-#undef _IRR_COMPILE_WITH_BURNINGSVIDEO_
-#endif
 
 //! Define _IRR_COMPILE_WITH_X11_ to compile the Irrlicht engine with X11 support.
 /** If you do not wish the engine to be compiled with X11, comment this
@@ -270,67 +241,15 @@ the engine will no longer read .png images. */
 #undef _IRR_USE_NON_SYSTEM_LIB_PNG_
 #endif
 
-//! Define _IRR_D3D_NO_SHADER_DEBUGGING to disable shader debugging in D3D9
-/** If _IRR_D3D_NO_SHADER_DEBUGGING is undefined in IrrCompileConfig.h,
-it is possible to debug all D3D9 shaders in VisualStudio. All shaders
-(which have been generated in memory or read from archives for example) will be emitted
-into a temporary file at runtime for this purpose. To debug your shaders, choose
-Debug->Direct3D->StartWithDirect3DDebugging in Visual Studio, and for every shader a
-file named 'irr_dbg_shader_%%.vsh' or 'irr_dbg_shader_%%.psh' will be created. Drag'n'drop
-the file you want to debug into visual studio. That's it. You can now set breakpoints and
-watch registers, variables etc. This works with ASM, HLSL, and both with pixel and vertex shaders.
-Note that the engine will run in D3D REF for this, which is a lot slower than HAL. */
-#define _IRR_D3D_NO_SHADER_DEBUGGING
-#ifdef NO_IRR_D3D_NO_SHADER_DEBUGGING
-#undef _IRR_D3D_NO_SHADER_DEBUGGING
-#endif
 
-//! Define _IRR_D3D_USE_LEGACY_HLSL_COMPILER to enable the old HLSL compiler in recent DX SDKs
-/** This enables support for ps_1_x shaders for recent DX SDKs. Otherwise, support
-for this shader model is not available anymore in SDKs after Oct2006. You need to
-distribute the OCT2006_d3dx9_31_x86.cab or OCT2006_d3dx9_31_x64.cab though, in order
-to provide the user with the proper DLL. That's why it's disabled by default. */
-//#define _IRR_D3D_USE_LEGACY_HLSL_COMPILER
-#ifdef NO_IRR_D3D_USE_LEGACY_HLSL_COMPILER
-#undef _IRR_D3D_USE_LEGACY_HLSL_COMPILER
-#endif
 
-//! Define _IRR_COMPILE_WITH_CG_ to enable Cg Shading Language support
-//#define _IRR_COMPILE_WITH_CG_
-#ifdef NO_IRR_COMPILE_WITH_CG_
-#undef _IRR_COMPILE_WITH_CG_
-#endif
-#if !defined(_IRR_COMPILE_WITH_OPENGL_) && !defined(_IRR_COMPILE_WITH_DIRECT3D_9_)
-#undef _IRR_COMPILE_WITH_CG_
-#endif
 
 //! Define _IRR_USE_NVIDIA_PERFHUD_ to opt-in to using the nVidia PerHUD tool
 /** Enable, by opting-in, to use the nVidia PerfHUD performance analysis driver
 tool <http://developer.nvidia.com/object/nvperfhud_home.html>. */
 #undef _IRR_USE_NVIDIA_PERFHUD_
 
-//! Define one of the three setting for Burning's Video Software Rasterizer
-/** So if we were marketing guys we could say Irrlicht has 4 Software-Rasterizers.
-	In a Nutshell:
-		All Burnings Rasterizers use 32 Bit Backbuffer, 32Bit Texture & 32 Bit Z or WBuffer,
-		16 Bit/32 Bit can be adjusted on a global flag.
 
-		BURNINGVIDEO_RENDERER_BEAUTIFUL
-			32 Bit + Vertexcolor + Lighting + Per Pixel Perspective Correct + SubPixel/SubTexel Correct +
-			Bilinear Texturefiltering + WBuffer
-
-		BURNINGVIDEO_RENDERER_FAST
-			32 Bit + Per Pixel Perspective Correct + SubPixel/SubTexel Correct + WBuffer +
-			Bilinear Dithering TextureFiltering + WBuffer
-
-		BURNINGVIDEO_RENDERER_ULTRA_FAST
-			16Bit + SubPixel/SubTexel Correct + ZBuffer
-*/
-
-#define BURNINGVIDEO_RENDERER_BEAUTIFUL
-//#define BURNINGVIDEO_RENDERER_FAST
-//#define BURNINGVIDEO_RENDERER_ULTRA_FAST
-//#define BURNINGVIDEO_RENDERER_CE
 
 //! Uncomment the following line if you want to ignore the deprecated warnings
 //#define IGNORE_DEPRECATED_WARNING
@@ -355,16 +274,6 @@ B3D, MS3D or X meshes */
 #define _IRR_COMPILE_WITH_B3D_LOADER_
 #ifdef NO_IRR_COMPILE_WITH_B3D_LOADER_
 #undef _IRR_COMPILE_WITH_B3D_LOADER_
-#endif
-//! Define _IRR_COMPILE_WITH_MS3D_LOADER_ if you want to Milkshape files
-#define _IRR_COMPILE_WITH_MS3D_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_MS3D_LOADER_
-#undef _IRR_COMPILE_WITH_MS3D_LOADER_
-#endif
-//! Define _IRR_COMPILE_WITH_X_LOADER_ if you want to use Microsoft X files
-#define _IRR_COMPILE_WITH_X_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_X_LOADER_
-#undef _IRR_COMPILE_WITH_X_LOADER_
 #endif
 //! Define _IRR_COMPILE_WITH_OGRE_LOADER_ if you want to load Ogre 3D files
 #define _IRR_COMPILE_WITH_OGRE_LOADER_
@@ -403,55 +312,10 @@ B3D, MS3D or X meshes */
 #ifdef NO_IRR_COMPILE_WITH_COLLADA_LOADER_
 #undef _IRR_COMPILE_WITH_COLLADA_LOADER_
 #endif
-//! Define _IRR_COMPILE_WITH_CSM_LOADER_ if you want to load Cartography Shop files
-#define _IRR_COMPILE_WITH_CSM_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_CSM_LOADER_
-#undef _IRR_COMPILE_WITH_CSM_LOADER_
-#endif
-//! Define _IRR_COMPILE_WITH_BSP_LOADER_ if you want to load Quake 3 BSP files
-#define _IRR_COMPILE_WITH_BSP_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_BSP_LOADER_
-#undef _IRR_COMPILE_WITH_BSP_LOADER_
-#endif
-//! Define _IRR_COMPILE_WITH_DMF_LOADER_ if you want to load DeleD files
-#define _IRR_COMPILE_WITH_DMF_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_DMF_LOADER_
-#undef _IRR_COMPILE_WITH_DMF_LOADER_
-#endif
-//! Define _IRR_COMPILE_WITH_LMTS_LOADER_ if you want to load LMTools files
-#define _IRR_COMPILE_WITH_LMTS_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_LMTS_LOADER_
-#undef _IRR_COMPILE_WITH_LMTS_LOADER_
-#endif
-//! Define _IRR_COMPILE_WITH_MY3D_LOADER_ if you want to load MY3D files
-#define _IRR_COMPILE_WITH_MY3D_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_MY3D_LOADER_
-#undef _IRR_COMPILE_WITH_MY3D_LOADER_
-#endif
 //! Define _IRR_COMPILE_WITH_OBJ_LOADER_ if you want to load Wavefront OBJ files
 #define _IRR_COMPILE_WITH_OBJ_LOADER_
 #ifdef NO_IRR_COMPILE_WITH_OBJ_LOADER_
 #undef _IRR_COMPILE_WITH_OBJ_LOADER_
-#endif
-//! Define _IRR_COMPILE_WITH_OCT_LOADER_ if you want to load FSRad OCT files
-#define _IRR_COMPILE_WITH_OCT_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_OCT_LOADER_
-#undef _IRR_COMPILE_WITH_OCT_LOADER_
-#endif
-//! Define _IRR_COMPILE_WITH_LWO_LOADER_ if you want to load Lightwave3D files
-#define _IRR_COMPILE_WITH_LWO_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_LWO_LOADER_
-#undef _IRR_COMPILE_WITH_LWO_LOADER_
-#endif
-//! Define _IRR_COMPILE_WITH_STL_LOADER_ if you want to load stereolithography files
-#define _IRR_COMPILE_WITH_STL_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_STL_LOADER_
-#undef _IRR_COMPILE_WITH_STL_LOADER_
-#endif
-//! Define _IRR_COMPILE_WITH_PLY_LOADER_ if you want to load Polygon (Stanford Triangle) files
-#define _IRR_COMPILE_WITH_PLY_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_PLY_LOADER_
-#undef _IRR_COMPILE_WITH_PLY_LOADER_
 #endif
 //! Define _IRR_COMPILE_WITH_SMF_LOADER_ if you want to load 3D World Studio mesh files
 #define _IRR_COMPILE_WITH_SMF_LOADER_
@@ -469,20 +333,10 @@ B3D, MS3D or X meshes */
 #ifdef NO_IRR_COMPILE_WITH_COLLADA_WRITER_
 #undef _IRR_COMPILE_WITH_COLLADA_WRITER_
 #endif
-//! Define _IRR_COMPILE_WITH_STL_WRITER_ if you want to write .stl files
-#define _IRR_COMPILE_WITH_STL_WRITER_
-#ifdef NO_IRR_COMPILE_WITH_STL_WRITER_
-#undef _IRR_COMPILE_WITH_STL_WRITER_
-#endif
 //! Define _IRR_COMPILE_WITH_OBJ_WRITER_ if you want to write .obj files
 #define _IRR_COMPILE_WITH_OBJ_WRITER_
 #ifdef NO_IRR_COMPILE_WITH_OBJ_WRITER_
 #undef _IRR_COMPILE_WITH_OBJ_WRITER_
-#endif
-//! Define _IRR_COMPILE_WITH_PLY_WRITER_ if you want to write .ply files
-#define _IRR_COMPILE_WITH_PLY_WRITER_
-#ifdef NO_IRR_COMPILE_WITH_PLY_WRITER_
-#undef _IRR_COMPILE_WITH_PLY_WRITER_
 #endif
 
 //! Define _IRR_COMPILE_WITH_BMP_LOADER_ if you want to load .bmp files
@@ -516,36 +370,12 @@ B3D, MS3D or X meshes */
 #ifdef NO_IRR_COMPILE_WITH_PSD_LOADER_
 #undef _IRR_COMPILE_WITH_PSD_LOADER_
 #endif
-//! Define _IRR_COMPILE_WITH_DDS_LOADER_ if you want to load .dds files
-// Outcommented because
-// a) it doesn't compile on 64-bit currently
-// b) anyone enabling it should be aware that S3TC compression algorithm which might be used in that loader
-// is patented in the US by S3 and they do collect license fees when it's used in applications.
-// So if you are unfortunate enough to develop applications for US market and their broken patent system be careful.
-// #define _IRR_COMPILE_WITH_DDS_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_DDS_LOADER_
-#undef _IRR_COMPILE_WITH_DDS_LOADER_
-#endif
 //! Define _IRR_COMPILE_WITH_TGA_LOADER_ if you want to load .tga files
 #define _IRR_COMPILE_WITH_TGA_LOADER_
 #ifdef NO_IRR_COMPILE_WITH_TGA_LOADER_
 #undef _IRR_COMPILE_WITH_TGA_LOADER_
 #endif
-//! Define _IRR_COMPILE_WITH_WAL_LOADER_ if you want to load .wal files
-#define _IRR_COMPILE_WITH_WAL_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_WAL_LOADER_
-#undef _IRR_COMPILE_WITH_WAL_LOADER_
-#endif
-//! Define _IRR_COMPILE_WITH_LMP_LOADER_ if you want to load .lmp files
-#define _IRR_COMPILE_WITH_LMP_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_LMP_LOADER_
-#undef _IRR_COMPILE_WITH_LMP_LOADER_
-#endif
-//! Define _IRR_COMPILE_WITH_RGB_LOADER_ if you want to load Silicon Graphics .rgb/.rgba/.sgi/.int/.inta/.bw files
-#define _IRR_COMPILE_WITH_RGB_LOADER_
-#ifdef NO_IRR_COMPILE_WITH_RGB_LOADER_
-#undef _IRR_COMPILE_WITH_RGB_LOADER_
-#endif
+
 
 //! Define _IRR_COMPILE_WITH_BMP_WRITER_ if you want to write .bmp files
 #define _IRR_COMPILE_WITH_BMP_WRITER_
@@ -641,25 +471,10 @@ currently only supports zip archives, though. */
 #ifdef NO__IRR_COMPILE_WITH_MOUNT_ARCHIVE_LOADER_
 #undef __IRR_COMPILE_WITH_MOUNT_ARCHIVE_LOADER_
 #endif
-//! Define __IRR_COMPILE_WITH_PAK_ARCHIVE_LOADER_ if you want to open ID software PAK archives
-#define __IRR_COMPILE_WITH_PAK_ARCHIVE_LOADER_
-#ifdef NO__IRR_COMPILE_WITH_PAK_ARCHIVE_LOADER_
-#undef __IRR_COMPILE_WITH_PAK_ARCHIVE_LOADER_
-#endif
-//! Define __IRR_COMPILE_WITH_NPK_ARCHIVE_LOADER_ if you want to open Nebula Device NPK archives
-#define __IRR_COMPILE_WITH_NPK_ARCHIVE_LOADER_
-#ifdef NO__IRR_COMPILE_WITH_NPK_ARCHIVE_LOADER_
-#undef __IRR_COMPILE_WITH_NPK_ARCHIVE_LOADER_
-#endif
 //! Define __IRR_COMPILE_WITH_TAR_ARCHIVE_LOADER_ if you want to open TAR archives
 #define __IRR_COMPILE_WITH_TAR_ARCHIVE_LOADER_
 #ifdef NO__IRR_COMPILE_WITH_TAR_ARCHIVE_LOADER_
 #undef __IRR_COMPILE_WITH_TAR_ARCHIVE_LOADER_
-#endif
-//! Define __IRR_COMPILE_WITH_WAD_ARCHIVE_LOADER_ if you want to open WAD archives
-#define __IRR_COMPILE_WITH_WAD_ARCHIVE_LOADER_
-#ifdef NO__IRR_COMPILE_WITH_WAD_ARCHIVE_LOADER_
-#undef __IRR_COMPILE_WITH_WAD_ARCHIVE_LOADER_
 #endif
 
 //! Set FPU settings
