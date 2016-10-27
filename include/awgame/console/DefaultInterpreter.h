@@ -10,19 +10,30 @@
 #ifndef awgame_DefaultInterpreter_H
 #define awgame_DefaultInterpreter_H
 #include <map>
-#include <awgame/console/CommandInterpreter.h>
+#include <functional>
+#include <awgame/console/Interpreter.h>
+#include <aw/types/containers/flat_map.h>
 namespace aw {
 namespace console {
 struct DefaultInterpreter final : Interpreter {
 	using Interpreter::Result;
-	virtual ~Interpreter() = default;
+	virtual ~DefaultInterpreter() = default;
 
-	Result processCommand(std::string cmd, std::string& out) override;
+	Result processCommand(std::string const& cmd, std::string& out) override;
+	bool complete(std::string const& cmd, std::string& out) override;
 
-	using EvalFunc = void(*)(std::string cmd, std::string& out);
+	using ArgumentList = std::vector<std::string>;
+	using EvalFunc = bool(ArgumentList const& cmd, std::string& out);
+	using EvalFunctor = std::function<EvalFunc>;
+
+	bool addCommand(std::string const& cmd, EvalFunctor func);
+	void removeCommand(std::string const& cmd);
 
 private:
-	std::map<std::string, EvalFunc> commands;
+	using map_type = aw::flat_map<ArgumentList, EvalFunctor>;
+
+	auto lookupCommand(ArgumentList& cmd) -> map_type::iterator;
+        map_type commands;
 };
 } // namespace console
 } // namespace aw

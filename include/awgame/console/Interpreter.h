@@ -21,8 +21,8 @@ struct Interpreter {
 	enum class Result {
 		//! Command was successfully processed
 		Success,
-		//! Command found, but there was an error
-		Error,
+		//! Command was executed, but there was an error
+		Failure,
 		//! Command was not found
 		NotFound,
 	};
@@ -32,7 +32,13 @@ struct Interpreter {
 	 * Messages produced by command are appended to \a out,
 	 * \return See enum Result.
 	 */
-	virtual Result processCommand(std::string cmd, std::string& out) = 0;
+	virtual Result processCommand(std::string const& cmd, std::string& out) = 0;
+
+	/*!
+	 * Complete \a cmd to longest unambiguous string.
+	 * \return true if \a out was modified.
+	 */
+	virtual bool complete(std::string const& cmd, std::string& out) = 0;
 };
 } // namespace console
 } // namespace aw
