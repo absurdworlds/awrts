@@ -19,6 +19,8 @@
 
 #include <awrts/graphics/video_manager.h>
 
+#include <awrts/version.h>
+
 namespace aw {
 namespace rts {
 void update()
@@ -52,8 +54,10 @@ bool render(graphics::video_manager& video)
 
 int run_game(int c, char const* const* v)
 {
-	journal.info("main()", "Initializing graphics subsystem.");
+	journal.info("main()", "Starting up awrts, build " AWRTS_BUILD_STRING);
+	journal.info("main()", "Version: " + to_string(version));
 
+	journal.info("main()", "Initializing graphics subsystem.");
 
 	graphics::video_manager video{1066, 600, false, true};
 	init_video(video);
