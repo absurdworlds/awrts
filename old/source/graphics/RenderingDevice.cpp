@@ -15,29 +15,12 @@
 namespace aw {
 namespace graphics {
 
-RenderingDevice::RenderingDevice(irr::video::IVideoDriver* driver)
-: driver_(driver)
-{
-
-}
-
-bool RenderingDevice::drawVertexPrimitive(const VertexBuffer& vb, const IndexBuffer& ib)
-{
-	return false;
-}
-
 void RenderingDevice::drawLine(const Vector3d<f32>& from,
 	const Vector3d<f32>& to, const Vector3d<f32>& color)
 {
 	irr::video::SColor irrcolor(255, irr::u32(color.x), irr::u32(color.y), irr::u32(color.z));
 
 	driver_->draw3DLine(aw::toIrr(from), hrengin::toIrr(to), irrcolor);
-}
-
-
-bool RenderingDevice::beginRender()
-{
-	return driver_->beginScene(true, true, irr::video::SColor(255, 100, 101, 140));
 }
 
 void RenderingDevice::drawDebug()
@@ -48,11 +31,5 @@ void RenderingDevice::drawDebug()
 	driver_->setMaterial(debugMat);
 	driver_->setTransform(irr::video::ETS_WORLD, irr::core::IdentityMatrix);
 }
-
-bool RenderingDevice::endRender()
-{
-	return driver_->endScene();
-}
-
 } // namespace video
 } // namespace aw

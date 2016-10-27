@@ -95,7 +95,8 @@ void video_manager::begin_render()
 	auto* renderer = dev->getVideoDriver();
 	auto* scenemgr = dev->getSceneManager();
 
-	renderer->beginScene();
+	static irr::video::SColor bgcolor{255, 100, 101, 140};
+	renderer->beginScene(true, true, bgcolor);
 	scenemgr->drawAll();
 }
 
