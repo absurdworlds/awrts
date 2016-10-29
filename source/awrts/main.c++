@@ -21,6 +21,8 @@
 
 #include <awrts/version.h>
 
+#include <awrts/map_loader.h>
+
 namespace aw {
 namespace rts {
 void update()
@@ -32,7 +34,7 @@ void update()
 
 void init_video(graphics::video_manager& video)
 {
-	video.set_window_caption("AW RTS [v0.0.0.0]");
+	video.set_window_caption("AWRTS [v0.0.0.0]");
 }
 
 
@@ -61,6 +63,10 @@ int run_game(int c, char const* const* v)
 
 	graphics::video_manager video{1066, 600, false, true};
 	init_video(video);
+
+	journal.info("main()", "Initializing game components.");
+	map_loader mapman{video};
+	mapman.load("data/maps/dummy.hdf");
 
 	journal.info("main()", "Setting up main loop.");
 

@@ -11,13 +11,6 @@
 namespace hrengin {
 namespace awrts {
 
-CMapManager::CMapManager(graphics::ISceneManager* sceneManager,
-	CUnitManager* unitManager)
-: scenemgr_(sceneManager), unitmgr_(unitManager)
-{
-
-}
-
 bool addUnit(hdf::IHDFParser* hdf, CUnitManager* umgr)
 {
 	u32 id;
@@ -68,47 +61,6 @@ bool addUnit(hdf::IHDFParser* hdf, CUnitManager* umgr)
 	return true;
 }
 
-bool CMapManager::loadMap(char * mapname)
-{
-	bool success = true;
-
-	hrengin::graphics::IVisNode* node = scenemgr_->createMeshSceneNode(mapname);
-
-	io::IReadFile* file = io::openReadFile("../maps/mainmenu.hmp/mapdata.hdf");
-	io::IBufferedStream* stream = io::createBufferedStream(file);
-	hdf::IHDFParser* hdf = hdf::createHDFParser(stream);
-	
-	hdf->read();
-	if(hdf->getObjectType() == hdf::HDF_OBJ_NODE) {
-		std::string name;
-		hdf->getObjectName(name);
-		if(name != "map") {
-			hdf->error(hdf::HDF_LOG_ERROR, "not a map data");
-		}
-	}
-
-	while(hdf->read()) {
-		if(hdf->getObjectType() == hdf::HDF_OBJ_NODE) {
-			std::string name;
-			hdf->getObjectName(name);
-
-			if(name == "addUnit") {
-				addUnit(hdf, unitmgr_);
-			} else {
-				hdf->error(hdf::HDF_LOG_WARNING, "unknown node: " + name);
-				hdf->skipNode();
-			}
-		} else {
-			break;
-		}
-	}
-
-	delete hdf;
-	delete stream;
-	delete file;
-
-	return success;
-}
 
 } // namespace awrts
 } // namespace hrengin
