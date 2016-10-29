@@ -33,6 +33,16 @@ public:
 	}
 
 	virtual void advance();
+	{
+		u32 time = aw::getTime();
+
+		for (auto event = events_.begin(); event != events_.end(); ++event) {
+			if ((*event).nextFire <= time) {
+				(*event).owner->think((*event).nextFire);
+				(*event).nextFire =  (*event).nextFire + (*event).period;
+			}
+		}
+	}
 private:
 	std::vector<Event> events_;
 };
