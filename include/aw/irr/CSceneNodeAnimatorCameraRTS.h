@@ -5,7 +5,8 @@
 #ifndef __C_SCENE_NODE_ANIMATOR_CAMERA_RTS_H_INCLUDED__
 #define __C_SCENE_NODE_ANIMATOR_CAMERA_RTS_H_INCLUDED__
 
-#include "Irrlicht/ISceneNodeAnimator.h"
+#include <Irrlicht/ISceneNodeAnimator.h>
+#include <Irrlicht/vector2d.h>
 
 #include <chrono>
 
@@ -112,13 +113,12 @@ namespace scene {
 		};
 		
 		gui::ICursorControl *CursorControl;
-		ITimer* Timer;
 		
 		bool FirstUpdateReceived = false;
 
 		using clock = std::chrono::steady_clock;
 		using time_point = std::chrono::time_point<clock>;
-		using durantion  = std::chrono::durantion<double>;
+		using duration  = std::chrono::duration<double>;
 
 		time_point last_update;
 

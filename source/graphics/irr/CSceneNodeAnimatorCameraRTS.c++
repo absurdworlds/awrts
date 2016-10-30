@@ -1,21 +1,19 @@
-
 // This is an extension for the "Irrlicht Engine".
 // See copyright notice in irrlicht.h
 
-#include "math.h"
+#include <aw/irr/CSceneNodeAnimatorCameraRTS.h>
 
-#include <hrengin/config/hrConfig.h>
-
-#include "CSceneNodeAnimatorCameraRTS.h"
+#include <Irrlicht/IVideoDriver.h>
+#include <Irrlicht/ICursorControl.h>
+#include <Irrlicht/ISceneManager.h>
+#include <Irrlicht/ISceneCollisionManager.h>
+#include <Irrlicht/ICameraSceneNode.h>
 
 namespace irr {
 namespace scene {
 	
 	CSceneNodeAnimatorCameraRTS::CSceneNodeAnimatorCameraRTS(gui::ICursorControl* cursor)
-		: CursorControl{cursor},
-		  Zooming(false), Rotating(false), Scrolling(false), Scroll_lock(true), Dragging(false),
-		  FirstUpdateReceived(false)
-
+		: CursorControl{cursor}
 	{
 		if (CursorControl)
 		{
