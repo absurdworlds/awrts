@@ -1,6 +1,6 @@
 RootPath    = ../..
 SourceExt   = c++
-Sources     = video_manager.c++
+Sources     = video_manager.c++ irr/CSceneNodeAnimatorCameraRTS.c++
 Defines     =
 Libraries   = awlog Irrlicht
 ProjectName = awgraphics

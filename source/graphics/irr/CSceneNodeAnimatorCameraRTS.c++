@@ -237,7 +237,7 @@ namespace scene {
 		
 
 		if (!Scroll_lock && !Dragging && !Zooming && !outwindow) {
-			f32 scrollstep = TranslateSpeed * CurrentZoom * time_delta;
+			f32 scrollstep = TranslateSpeed * CurrentZoom * time_delta.count();
 			if ((mousepos.X > 0) && (mousepos.X < 5)) {
 				translate.X -= scrollstep;
 			} else if ((mousepos.X > (screen.Width - 5))
