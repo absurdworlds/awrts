@@ -28,10 +28,6 @@ CPlayerHuman::CPlayerHuman(graphics::ISceneManager* sceneManager,
 	: PlayerInputDisabled(false), physWorld_(physicsWorld), scnmgr_(sceneManager),
 	unitmgr_(unitManager), tmpSelUnit_(0), entmgr_(unitManager->entmgr_)
 {
-	povCamera_ = sceneManager->createCameraSceneNode();
-	povCamera_->SetBehavior(hrengin::graphics::ICameraNode::CAM_STRATEGIC);
-	//mCurrentPOV = mDefaultPOV = pPlayerCam;
-	
 }
 
 CUnit* CPlayerHuman::getUnitFromRay(Line3d<f32> ray)
@@ -159,7 +155,7 @@ bool CPlayerHuman::onUserInput(hrengin::gui::InputEvent input)
 	} else if (input.type == gui::InputEventType::KeyboardEvent) {
 		static int numbers = 0;
 		//hrengin::CLogger::log("knopkodoska input " + std::to_string(app.encore->GetTime()) + "\n");
-		/*if(input.key.keyCode == irr::KEY_KEY_I && input.key.pressedDown)
+		if(input.key.keyCode == irr::KEY_KEY_I && input.key.pressedDown)
 		{
 			hrengin::base::line3df ray = povCamera_->castRayFromScreen(X,Y);
 			CUnit* rayHit = getUnitFromRay(ray);
@@ -185,13 +181,15 @@ bool CPlayerHuman::onUserInput(hrengin::gui::InputEvent input)
 		} else if (input.key.keyCode == irr::KEY_KEY_U && input.key.pressedDown) {
 			hrengin::getLogger().push("DEBUG:");
 			hrengin::getLogger().push(std::to_string(unitmgr_->getUnitCount()));
+
+
 			hrengin::getLogger().push(hrengin::endl);
 		} else if (input.key.keyCode == irr::KEY_KEY_P && input.key.pressedDown) {
 			app.profiling = !app.profiling;
 			getLogger().push("DEBUG: Profiling =");
 			getLogger().push(std::to_string(app.profiling));
 			getLogger().push(hrengin::endl);
-		} else*/ if (input.key.keyCode == hrengin::KEY_KEY_S && input.key.pressedDown) {
+		} else if (input.key.keyCode == hrengin::KEY_KEY_S && input.key.pressedDown) {
 			if(tmpSelUnit_) {
 				tmpSelUnit_->issueImmediateOrder(ORDER_STOP);
 			}

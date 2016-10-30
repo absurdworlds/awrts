@@ -22,6 +22,7 @@
 #include <awrts/version.h>
 
 #include <awrts/map_loader.h>
+#include <awrts/players/player.h>
 
 namespace aw {
 namespace rts {
@@ -67,6 +68,9 @@ int run_game(int c, char const* const* v)
 	journal.info("main()", "Initializing game components.");
 	map_loader mapman{video};
 	mapman.load("data/maps/dummy.hdf");
+
+	player pl{video};
+
 
 	journal.info("main()", "Setting up main loop.");
 

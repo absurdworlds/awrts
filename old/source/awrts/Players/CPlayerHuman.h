@@ -38,11 +38,7 @@ public:
 		return !PlayerInputDisabled;
 	}
 	
-	virtual bool Sync() 
-	{
-		//mPosition = mPOV->mPosition;
-		return false;
-	}
+
 private:
 	IEntityManager* entmgr_;
 	scene::ISceneManager* scnmgr_;
