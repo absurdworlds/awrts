@@ -144,7 +144,7 @@ namespace scene {
 
 		f32 ZoomSpeed      = 0.1f;
 		f32 RotateSpeed    = 0.1f;
-		f32 TranslateSpeed = 0.1f;
+		f32 TranslateSpeed = 100.0f;
 
 		f32 MinZoom = 0.2f;
 		f32 MaxZoom = 5.0f;

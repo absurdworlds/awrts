@@ -236,16 +236,16 @@ namespace scene {
 
 		if (!Scroll_lock && !Dragging && !Zooming && !outwindow) {
 			f32 scrollstep = TranslateSpeed * CurrentZoom * time_delta.count();
-			if ((mousepos.X > 0) && (mousepos.X < 5)) {
+			if ((mousepos.X > 0) && (mousepos.X < 10)) {
 				translate.X -= scrollstep;
-			} else if ((mousepos.X > (screen.Width - 5))
+			} else if ((mousepos.X > (screen.Width - 10))
 				   && (mousepos.X < screen.Width)) {
 				translate.X += scrollstep;
 			}
 			
-			if ((mousepos.Y > 0) && (mousepos.Y < 5)) {
+			if ((mousepos.Y > 0) && (mousepos.Y < 10)) {
 				translate.Z += scrollstep;
-			} else if ((mousepos.Y > (screen.Height - 5))
+			} else if ((mousepos.Y > (screen.Height - 10))
 				   && (mousepos.Y < screen.Height)) {
 				translate.Z -= scrollstep;
 			}
