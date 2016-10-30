@@ -39,11 +39,9 @@ public:
 	};
 
 	void loadUnitTypes();
-	void addType(UnitType type);
 	std::unordered_map<hrengin::u32,UnitType> unitTypes_;
 private:
 	std::vector<CUnit*> units_;
-	//std::vector<CUnitType> mUnitTypes;
 
 	graphics::ISceneManager* scnmgr_;
 	physics::IPhysicsManager* phymgr_;

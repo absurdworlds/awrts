@@ -196,12 +196,5 @@ void CUnitManager::loadUnitTypes()
 	delete file;
 }
 
-void CUnitManager::addType(UnitType type)
-{
-	if(unitTypes_.find(type.id) == unitTypes_.end()) {
-		unitTypes_[type.id] = type;
-	}
-}
-
 }
 } // namespace hrengin
