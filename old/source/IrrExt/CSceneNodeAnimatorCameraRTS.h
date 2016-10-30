@@ -5,79 +5,30 @@
 #ifndef __C_SCENE_NODE_ANIMATOR_CAMERA_RTS_H_INCLUDED__
 #define __C_SCENE_NODE_ANIMATOR_CAMERA_RTS_H_INCLUDED__
 
-#include "Irrlicht/irrlicht.h"
-#include "ISceneNodeAnimatorCameraRTS.h"
+#include "Irrlicht/ISceneNodeAnimator.h"
 
-namespace irr
-{
+#include <chrono>
 
+namespace irr {
 namespace gui
 {
 	class ICursorControl;
 }
 
-namespace scene
-{
+namespace scene {
 
 	//! Scene node animator for RTS cameras
-	class CSceneNodeAnimatorCameraRTS : public ISceneNodeAnimatorCameraRTS
-	{
-	public:
-
+	struct CSceneNodeAnimatorCameraRTS : ISceneNodeAnimator {
 		//! Constructor
-		CSceneNodeAnimatorCameraRTS(gui::ICursorControl* cursor, ITimer* timer, f32 distance=36.055, f32 angle=0.9828, f32 angle_close=0.5880, 
-		f32 translateSpeed = 0.1f, f32 rotateSpeed = 0.1f, f32 zoomSpeed=0.1f);
+		CSceneNodeAnimatorCameraRTS(gui::ICursorControl* cursor);
 
-		//! Destructor
-		virtual ~CSceneNodeAnimatorCameraRTS();
+		~CSceneNodeAnimatorCameraRTS() override;
 
 		//! Animates the scene node, currently only works on cameras
-		virtual void animateNode(ISceneNode* node, u32 timeMs);
+		void animateNode(ISceneNode* node, u32 timeMs) override;
 
 		//! Event receiver
-		virtual bool OnEvent(const SEvent& event);
-
-		//! Returns the speed of movement
-		virtual f32 getMoveSpeed() const;
-
-		//! Sets the speed of movement
-		virtual void setMoveSpeed(f32 moveSpeed);
-
-		//! Returns the rotation speed
-		virtual f32 getRotateSpeed() const;
-
-		//! Set the rotation speed
-		virtual void setRotateSpeed(f32 rotateSpeed);
-
-		//! Returns the zoom speed
-		virtual f32 getZoomSpeed() const;
-
-		//! Set the zoom speed
-		virtual void setZoomSpeed(f32 zoomSpeed);
-
-		//! Returns the camera zoom
-		virtual f32 getZoom() const;
-
-		//! Set the camera zoom
-		virtual void setZoom(f32 multiplier);
-
-		//! Returns the current distance, i.e. orbit radius
-		virtual f32 getDistance() const;
-
-		//! Set the distance
-		virtual void setDistance(f32 dist);
-		
-		//! Get the camera angle
-		virtual f32 getAngle() const;
-
-		//! Set the camera angle
-		virtual void setAngle(f32 a);
-
-		//! Get the camera angle for close zoom
-		virtual f32 getAngleClose() const;
-
-		//! Set the camera angle
-		virtual void setAngleClose(f32 a);
+		bool OnEvent(const SEvent& event) override;
 
 		//! Sets the keyboard mapping for this animator (old style)
 		//virtual void setKeyMap(SRTSKeyMap *map, u32 count);
@@ -90,13 +41,10 @@ namespace scene
 		//virtual const core::array<SRTSKeyMap>& getKeyMap() const;
 		
 		//! This animator will receive events when attached to the active camera
-		virtual bool isEventReceiverEnabled() const
-		{
-			return true;
-		}
+		bool isEventReceiverEnabled() const override { return true; }
 
 		//! Returns the type of this animator
-		virtual ESCENE_NODE_ANIMATOR_TYPE getType() const
+		ESCENE_NODE_ANIMATOR_TYPE getType() const override
 		{
 			return ESNAT_CAMERA_FPS;
 		}
@@ -105,7 +53,49 @@ namespace scene
 		/** Please note that you will have to drop
 		(IReferenceCounted::drop()) the returned pointer once you're
 		done with it. */
-		virtual ISceneNodeAnimator* createClone(ISceneNode* node, ISceneManager* newManager=0);
+		ISceneNodeAnimator* createClone(ISceneNode* node, ISceneManager* newManager=0) override;
+
+		//! Returns the speed of movement
+		f32 getMoveSpeed() const;
+
+		//! Sets the speed of movement
+		void setMoveSpeed(f32 moveSpeed);
+
+		//! Returns the rotation speed
+		f32 getRotateSpeed() const;
+
+		//! Set the rotation speed
+		void setRotateSpeed(f32 rotateSpeed);
+
+		//! Returns the zoom speed
+		f32 getZoomSpeed() const;
+
+		//! Set the zoom speed
+		void setZoomSpeed(f32 zoomSpeed);
+
+		//! Returns the camera zoom
+		f32 getZoom() const;
+
+		//! Set the camera zoom
+		void setZoom(f32 multiplier);
+
+		//! Returns the current distance, i.e. orbit radius
+		f32 getDistance() const;
+
+		//! Set the distance
+		void setDistance(f32 dist);
+		
+		//! Get the camera angle
+		f32 getAngle() const;
+
+		//! Set the camera angle
+		void setAngle(f32 a);
+
+		//! Get the camera angle for close zoom
+		f32 getAngleClose() const;
+
+		//! Set the camera angle
+		void setAngleClose(f32 a);
 
 	private:
 		void allKeysUp();
@@ -124,11 +114,17 @@ namespace scene
 		gui::ICursorControl *CursorControl;
 		ITimer* Timer;
 		
-		bool FirstUpdateReceived;
-		u32 LastUpdate;
+		bool FirstUpdateReceived = false;
+
+		using clock = std::chrono::steady_clock;
+		using time_point = std::chrono::time_point<clock>;
+		using durantion  = std::chrono::durantion<double>;
+
+		time_point last_update;
+
 		//scene::ICameraSceneNode* OldCamera;
 		//core::vector3df OldTarget;
-		//core::vector3df LastCameraTarget;	
+		//core::vector3df LastCameraTarget;
 		
 		//core::array<SRTSKeyMap> KeyMap;
 
@@ -136,26 +132,26 @@ namespace scene
 		core::position2df ZoomStart;
 		core::position2df TranslateStart;*/
 
-		f32 distance;
-		f32 angle;
-		f32 angle_close;
+		f32 distance    = 36.055;
+		f32 angle       = 0.9828;
+		f32 angle_close = 0.5880;
 		
-		core::vector2di mousepos;
-		core::vector2di mousepos_old;
-		core::vector3df lasthit;
+		core::vector2di mousepos{0,0};
+		core::vector2di mousepos_old{0,0};
+		core::vector3df lasthit{0.0f, 0.0f, 0.0f};
 
 		//bool CursorKeys[EKA_RTS_COUNT];
 
-		f32 ZoomSpeed;
-		f32 RotateSpeed;
-		f32 TranslateSpeed;
+		f32 ZoomSpeed      = 0.1f;
+		f32 RotateSpeed    = 0.1f;
+		f32 TranslateSpeed = 0.1f;
+
+		f32 MinZoom = 0.2f;
+		f32 MaxZoom = 5.0f;
+		f32 NewZoom = 1.0f;
+		f32 CurrentZoom = 1.0f;
 		
-		f32 MinZoom;
-		f32 NewZoom;
-		f32 CurrentZoom;
-		f32 MaxZoom;
-		
-		f32 RotZ;
+		f32 RotZ    = 0.0f;
 		f32 MaxRotZ;
 
 		//s32 LastAnimationTime;
@@ -163,14 +159,14 @@ namespace scene
 		bool firstUpdate;
 		//bool firstInput;
 
-		bool Zooming;
-		bool Rotating;
-		bool Scrolling;
-		bool Scroll_lock;
-		bool Dragging;
+		bool Zooming     = false;
+		bool Rotating    = false;
+		bool Scrolling   = false;
+		bool Scroll_lock = true;
+		bool Dragging    = false;
 	};
 
-} // end namespace scene
-} // end namespace irr
+} // namespace scene
+} // namespace irr
 
 #endif//__C_SCENE_NODE_ANIMATOR_CAMERA_RTS_H_INCLUDED__

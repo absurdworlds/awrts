@@ -8,24 +8,15 @@
 
 #include "CSceneNodeAnimatorCameraRTS.h"
 
-namespace irr
-{
-namespace scene
-{
+namespace irr {
+namespace scene {
 	
-	CSceneNodeAnimatorCameraRTS::CSceneNodeAnimatorCameraRTS(gui::ICursorControl* cursor, ITimer* timer, f32 distance, f32 angle, f32 angle_close, 
-		f32 translateSpeed, f32 rotateSpeed, f32 zoomSpeed) 
-		: CursorControl(cursor), lasthit(0.0f, 0.0f, 0.0f), mousepos(0,0), mousepos_old(0,0),
-		  Timer(timer), ZoomSpeed(zoomSpeed), RotateSpeed(rotateSpeed), TranslateSpeed(translateSpeed),
+	CSceneNodeAnimatorCameraRTS::CSceneNodeAnimatorCameraRTS(gui::ICursorControl* cursor)
+		: CursorControl{cursor},
 		  Zooming(false), Rotating(false), Scrolling(false), Scroll_lock(true), Dragging(false),
-		  MinZoom(0.2f), MaxZoom(5.f), NewZoom(1.0f), CurrentZoom(1.0f), RotZ(0.0f),
-		  distance(distance), angle(angle), angle_close(angle_close), FirstUpdateReceived(false)
+		  FirstUpdateReceived(false)
 
 	{
-		#ifdef _DEBUG
-			//fprintf(stderr, "DEBUG: function call %s\n", __FUNCTION_NAME__);
-		#endif //_DEBUG
-
 		if (CursorControl)
 		{
 			CursorControl->grab();
@@ -158,18 +149,16 @@ namespace scene
 		}
 		
 		core::dimension2d<u32> screen = scnmgr->getVideoDriver()->getScreenSize();
-
 		if(!FirstUpdateReceived)
 		{
-			LastUpdate = Timer->getTime();
+			last_update = clock::now();
 			FirstUpdateReceived = true;
-
 			return;
 		}
 		
-		u32 TimeDelta = LastUpdate;
-		LastUpdate = Timer->getTime();
-		TimeDelta = LastUpdate - TimeDelta;
+		auto now = clock::now();
+		duration time_delta = now - last_update;
+		last_update = now;
 		
 		// Camera movement
 		core::vector3df pos = camera->getPosition();
@@ -248,7 +237,7 @@ namespace scene
 		
 
 		if (!Scroll_lock && !Dragging && !Zooming && !outwindow) {
-			f32 scrollstep = TranslateSpeed * CurrentZoom * static_cast<irr::f32>(TimeDelta);
+			f32 scrollstep = TranslateSpeed * CurrentZoom * time_delta;
 			if ((mousepos.X > 0) && (mousepos.X < 5)) {
 				translate.X -= scrollstep;
 			} else if ((mousepos.X > (screen.Width - 5))
@@ -398,8 +387,13 @@ namespace scene
 
 	ISceneNodeAnimator* CSceneNodeAnimatorCameraRTS::createClone(ISceneNode* node, ISceneManager* newManager)
 	{
-		CSceneNodeAnimatorCameraRTS * newAnimator =
-			new CSceneNodeAnimatorCameraRTS(CursorControl, Timer, RotateSpeed, ZoomSpeed, TranslateSpeed);
+		CSceneNodeAnimatorCameraRTS* newAnimator = new CSceneNodeAnimatorCameraRTS{CursorControl};
+		newAnimator->setMoveSpeed(getMoveSpeed());
+		newAnimator->setRotateSpeed(getRotateSpeed());
+		newAnimator->setZoomSpeed(getZoomSpeed());
+		newAnimator->setDistance(getDistance());
+		newAnimator->setAngle(getAngle());
+		newAnimator->setAngleClose(getAngleClose());
 		return newAnimator;
 	}
 
