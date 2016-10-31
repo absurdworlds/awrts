@@ -41,10 +41,6 @@ CUnitManager::CUnitManager(graphics::ISceneManager* sceneManager,
 
 CUnit& CUnitManager::createUnit(hrengin::u32 id, Vector3d<f32> position, hrengin::f32 facing)
 {
-	UnitType unitType = unitTypes_[id];
-
-	graphics::IVisNode* unitVisual = scnmgr_->createMeshSceneNode(unitType.visualModelName);
-
 	physics::IRigidBody::RigidBodyConstructionInfo rbInfo;
 
 	rbInfo.mass = 0.0f;

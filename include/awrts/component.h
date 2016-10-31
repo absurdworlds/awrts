@@ -9,6 +9,7 @@
 #ifndef awrts_component_h
 #define awrts_component_h
 #include <aw/types/types.h>
+#include <awrts/entity.h>
 namespace aw {
 namespace rts {
 struct component {

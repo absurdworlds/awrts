@@ -15,14 +15,14 @@
 
 #include <Irrlicht/IrrlichtDevice.h>
 #include <Irrlicht/ISceneManager.h>
-#include <Irrlicht/ICameraSceneNode.h>
 #include <Irrlicht/IAnimatedMeshSceneNode.h>
 #include <Irrlicht/ISceneCollisionManager.h>
 
 namespace aw::rts {
 
-fs::path const model_path = "data/models/";
+static fs::path const model_path = "data/models/";
 
+namespace {
 void parse_map_geometry_node(hdf::Parser& parser, irr::scene::ISceneManager* scmgr)
 {
 	using namespace std::string_literals;
@@ -49,6 +49,7 @@ void parse_map_geometry_node(hdf::Parser& parser, irr::scene::ISceneManager* scm
 	IAnimatedMeshSceneNode* node = scmgr->addAnimatedMeshSceneNode(mesh);
 	// node->addShadowVolumeSceneNode();
 }
+} // namespace
 
 bool map_loader::load(fs::path const& map_path)
 {
@@ -58,17 +59,12 @@ bool map_loader::load(fs::path const& map_path)
 	irr::IrrlichtDevice& dev = vm.irr_device();
 	irr::scene::ISceneManager* scmgr = dev.getSceneManager();
 
+	// (old TODO: global lighting manager?)
+	scmgr->setAmbientLight(irr::video::SColorf(0.35f,0.35f,0.35f,0.35f));
+
 	irr::scene::ILightSceneNode* light = scmgr->addLightSceneNode(0,
 		irr::core::vector3df(100, 1000, 100),
 		irr::video::SColorf(0.95f, 0.95f, 1.00f, 0.0f), 2800.0f);
-	irr::scene::ICameraSceneNode* camera = scmgr->addCameraSceneNode(0,
-		irr::core::vector3df(0, 0, 0),
-		irr::core::vector3df(0, 0, 0));
-
-	camera->setPosition(irr::core::vector3df(100,100,100));
-
-	// (old TODO: global lighting manager?)
-	scmgr->setAmbientLight(irr::video::SColorf(0.35f,0.35f,0.35f,0.35f));
 
 	hdf::Object obj;
 	while (parser.read(obj)) {

@@ -23,6 +23,7 @@
 
 #include <awrts/map_loader.h>
 #include <awrts/players/player.h>
+#include <awrts/units/unit_factory.h>
 
 namespace aw {
 namespace rts {
@@ -70,6 +71,13 @@ int run_game(int c, char const* const* v)
 	mapman.load("data/maps/dummy.hdf");
 
 	player pl{video};
+
+	unit_type btrk;
+	btrk.visual.model_name = "butruck.obj";
+
+	unit_factory uf{video};
+	unit u1 = uf.create_unit( btrk );
+
 
 
 	journal.info("main()", "Setting up main loop.");
