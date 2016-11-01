@@ -32,16 +32,16 @@ struct unit_type {
 	// TODO: replace all strings with pointers to
 	// "prototypes" — classes that are used to create a concrete instance
 	struct {
-		string_view name;
-		string_view description;
+		std::string name;
+		std::string description;
 	} text;
 
 	struct {
-		string_view model_name;
+		std::string model_name;
 	} visual;
 
 	struct {
-		string_view selection_shape;
+		std::string selection_shape;
 	} gui;
 
 	struct {
@@ -49,7 +49,7 @@ struct unit_type {
 	} combat;
 
 	struct {
-		string_view type;
+		std::string type;
 		float height;
 		float speed;
 		float acceleration;

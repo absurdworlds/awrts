@@ -23,22 +23,19 @@ namespace aw::rts {
 static fs::path const model_path = "data/models/";
 
 namespace {
-void parse_map_geometry_node(hdf::Parser& parser, irr::scene::ISceneManager* scmgr)
+void parse_map_geometry_node(hdf::parser& parser, irr::scene::ISceneManager* scmgr)
 {
 	using namespace std::string_literals;
 
 	fs::path model_name;
-	hdf::Object obj;
-	while (parser.read(obj)) {
-		hdf::Object::Kind& type = obj.type;
+	while (auto obj = parser.read()) {
+		hdf::object_kind&  type = obj.kind;
 		std::string const& name = obj.name;
 
-		if (obj.type == hdf::Object::Value) {
-			if (obj.name == "model-name")
+		if (type == hdf::object::value) {
+			if (name == "model-name")
 				model_name = obj.val.try_get( ""s );
-		} else if (obj.type == hdf::Object::NodeEnd) {
-			break;
-		} else if (obj.type == hdf::Object::Node) {
+		} else if (type == hdf::object::node) {
 			parser.skip_node();
 		}
 	}
@@ -54,7 +51,7 @@ void parse_map_geometry_node(hdf::Parser& parser, irr::scene::ISceneManager* scm
 bool map_loader::load(fs::path const& map_path)
 {
 	io::input_file_stream stream{map_path};
-	hdf::Parser parser{stream, &log_impl};
+	hdf::parser parser{stream, &log_impl};
 
 	irr::IrrlichtDevice& dev = vm.irr_device();
 	irr::scene::ISceneManager* scmgr = dev.getSceneManager();
@@ -66,11 +63,11 @@ bool map_loader::load(fs::path const& map_path)
 		irr::core::vector3df(100, 1000, 100),
 		irr::video::SColorf(0.95f, 0.95f, 1.00f, 0.0f), 2800.0f);
 
-	hdf::Object obj;
+	hdf::object obj;
 	while (parser.read(obj)) {
-		hdf::Object::Kind& type = obj.type;
+		hdf::object_kind&  type = obj.kind;
 		std::string const& name = obj.name;
-		if (obj.type == hdf::Object::Node) {
+		if (type == hdf::object::node) {
 			if (name == "geometry") {
 				parse_map_geometry_node(parser, scmgr);
 			} else if (name == "unit") {

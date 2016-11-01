@@ -23,6 +23,7 @@
 
 #include <awrts/map_loader.h>
 #include <awrts/players/player.h>
+#include <awrts/units/unit_table.h>
 #include <awrts/units/unit_factory.h>
 
 namespace aw {
@@ -72,11 +73,11 @@ int run_game(int c, char const* const* v)
 
 	player pl{video};
 
-	unit_type btrk;
-	btrk.visual.model_name = "butruck.obj";
+	unit_table units;
+	load_unit_types(units, "data/units.aw");
 
 	unit_factory uf{video};
-	unit u1 = uf.create_unit( btrk );
+	unit u1 = uf.create_unit( *units["Btrk"] );
 
 
 

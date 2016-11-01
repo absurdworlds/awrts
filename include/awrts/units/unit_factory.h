@@ -19,7 +19,7 @@ struct unit_factory {
 	unit_factory(graphics::video_manager& vm)
 		: vm{vm}
 	{}
-	unit create_unit(unit_type& type);
+	unit create_unit(unit_type const& type);
 
 private:
 	graphics::video_manager& vm;

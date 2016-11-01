@@ -16,7 +16,7 @@
 namespace aw::rts {
 static fs::path const model_path = "data/models/units";
 
-unit unit_factory::create_unit(unit_type& type)
+unit unit_factory::create_unit(unit_type const& type)
 {
 	fs::path model_name{type.visual.model_name.begin(), type.visual.model_name.end()};
 	fs::path path = model_path/model_name;
