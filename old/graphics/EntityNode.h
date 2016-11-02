@@ -6,23 +6,21 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef _aw_EntitySceneNode_
-#define _aw_EntitySceneNode_
-#include <awrts/game/Entity.h>
-
-#include <aw/scene/SceneNode.h>
+#ifndef _aw_EntityNode_
+#define _aw_EntityNode_
+#include <aw/scene/EntityNode.h>
 
 namespace aw {
 class Entity;
-
 namespace scene {
-/*! This type of node represents a game entity
- * \see Entity
- */
+
 class EntityNode : Node {
 public:
+	EntityNode(Entity* entity);
+	virtual ~EntityNode();
+private:
 };
 
 } // namespace scene
 } // namespace aw
-#endif //_aw_EntitySceneNode_
+#endif//_aw_EntityNode_

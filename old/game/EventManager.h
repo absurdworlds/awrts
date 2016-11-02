@@ -16,9 +16,21 @@
 
 namespace aw {
 namespace game {
-namespace impl_ {
-class EventManager : public game::EventManager {
-public:
+class Thinking;
+typedef void (*EventCallback) (u32);
+
+typedef struct {
+	union {
+		Thinking* owner;
+		EventCallback callback;
+	};
+	u32 nextFire;
+	u32 period;
+	bool isActive : 1;
+	bool isCallback : 1;
+} Event;
+
+struct EventManager {
 	virtual ~EventManager()
 	{
 
@@ -47,8 +59,6 @@ private:
 	std::vector<Event> events_;
 };
 
-} // namespace impl_
 } // namespace game
 } // namespace aw
 #endif//_aw_EventManager_impl_
-

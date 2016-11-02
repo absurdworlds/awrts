@@ -22,16 +22,34 @@ class VideoDriver;
 
 namespace aw {
 namespace graphics {
+class VertexBuffer;
+class IndexBuffer;
+
 
 class RenderingDevice : public RenderingDevice {
 public:
 	RenderingDevice(irr::video::IVideoDriver* driver);
+	/*! Prepare scene for rendering.
+	 *  Must be called before drawing anything.
+	 */
+	virtual bool beginRender();
+	// beginFrame()
+
+	//! end rendering the scene, and swap the buffers
+	virtual bool endRender();
+	// post()
+	
+	//! temporary tool to render debug drawers
+	virtual void drawDebug();
+
+	//! Draw a primitive using index buffer and vertex buffer
 	virtual bool drawVertexPrimitive(const VertexBuffer& vb, const IndexBuffer& ib);
+
+	//! Draw a line primitive
+	virtual void drawLine(Vector3d<f32> const& from,
+		Vector3d<f32> const& to, Vector3d<f32> const& color) = 0;
 	virtual void drawLine(const Vector3d<f32>& from, const Vector3d<f32>& to, const Vector3d<f32>& color);
 
-	virtual bool beginRender();
-	virtual void drawDebug();
-	virtual bool endRender();
 private:
 	irr::video::IVideoDriver* driver_;
 };
