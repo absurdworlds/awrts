@@ -24,6 +24,8 @@
 #include <Irrlicht/CIrrDeviceSDL.h>
 #endif
 
+#include "irr/logger.h"
+
 using namespace irr;
 
 namespace {
@@ -54,6 +56,9 @@ IrrlichtDevice* create_irrlicht_device(SIrrlichtCreationParameters& params)
 
 namespace aw {
 namespace graphics {
+log_provider journal;
+logger       irr_logger;
+
 video_manager::video_manager(u32 resX, u32 resY, bool fullscreen, bool vsync)
 {
 	SIrrlichtCreationParameters params;
@@ -78,6 +83,11 @@ video_manager::video_manager(u32 resX, u32 resY, bool fullscreen, bool vsync)
 	}
 
 	//settings->setValue("platform.win32.wndHandle", reinterpret_cast<i32>(device_->getVideoDriver()->getExposedVideoData().OpenGLWin32.HWnd));
+
+	// Set irrlicht's logger — I think there would be no problems with
+	// this one, as it only redirects messages to journals, and doesn't do any
+	// initialization or destruction
+	irr::os::Printer::Logger = &irr_logger;
 }
 
 video_manager::~video_manager()

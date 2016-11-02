@@ -12,6 +12,10 @@
 #include <aw/log/log_provider.h>
 #include <aw/log/log_filter.h>
 namespace aw {
+namespace graphics {
+extern log_provider journal;
+} // namespace graphics
+
 namespace rts {
 extern log_provider journal;
 

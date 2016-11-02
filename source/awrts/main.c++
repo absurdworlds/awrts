@@ -64,6 +64,7 @@ int run_game(int c, char const* const* v)
 
 	journal.info("main()", "Initializing graphics subsystem.");
 
+	graphics::journal.set_logger(&log_impl);
 	graphics::video_manager video{1066, 600, false, true};
 	init_video(video);
 
