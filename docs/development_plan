@@ -5,10 +5,11 @@
 X.B     — релиз
 
 0.0.0.1
-— портировать всё из старого авртс + мейнменю
+— портировать всё из старого авртс
 0.0.0.2
 — pathfinding (obstacle avoidance)
 — map manager
+— mainmenu
 0.0.0.3
 — weapons & damage
 

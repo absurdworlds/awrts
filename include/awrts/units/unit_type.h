@@ -27,7 +27,7 @@ enum UnitMovementType {
 */
 
 struct unit_type {
-	u32 id;
+	u32 id = -1;
 
 	// TODO: replace all strings with pointers to
 	// "prototypes" — classes that are used to create a concrete instance
@@ -45,23 +45,23 @@ struct unit_type {
 	} gui;
 
 	struct {
-		u64 hitpoints;
+		u64 hitpoints = 1;
 	} combat;
 
 	struct {
 		std::string type;
-		float height;
-		float speed;
-		float acceleration;
-		float deceleration;
-		float turn_speed;
-		bool  can_reverse;
-		float reverse_speed;
-		float reverse_turn_speed;
+		float height = 0;
+		float speed  = 0;
+		float acceleration = 0;
+		float deceleration = 0;
+		float turn_speed   = 0;
+		bool  can_reverse  = false;
+		float reverse_speed      = 0;
+		float reverse_turn_speed = 0;
 	} movement;
 
 	struct {
-		float width;
+		float width = 0;
 	} pathfinding;
 };
 

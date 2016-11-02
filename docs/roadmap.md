@@ -1,6 +1,6 @@
 * Port everything from old awrts
-    * Unit types [done]
-    * Map loader [partial]
+    * Unit types  [done]
+    * Map loader  [done]
     * RTS camera  [done]
     * Unit selection & orders [not started]
     * Unit movement [not started]

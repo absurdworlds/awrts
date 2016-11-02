@@ -10,10 +10,18 @@
 #define awrts_unit_h
 #include <awrts/units/unit_type.h>
 #include <awrts/component.h>
+
+namespace irr {
+namespace scene {
+class ISceneNode;
+}
+}
+
 namespace aw {
 namespace rts {
 struct unit : entity {
-
+	// FIXME: temporary, until graphics component is implemented
+	irr::scene::ISceneNode* node;
 };
 } // namespace rts
 } // namespace aw

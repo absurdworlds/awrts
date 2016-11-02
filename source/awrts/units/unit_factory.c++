@@ -27,7 +27,11 @@ unit unit_factory::create_unit(unit_type const& type)
 	ISceneManager* scmgr = dev.getSceneManager();
 	IAnimatedMesh* mesh = scmgr->getMesh(path.string().data());
 	IAnimatedMeshSceneNode* node = scmgr->addAnimatedMeshSceneNode(mesh);
-	return {};
+
+	// FIXME: temporary
+	unit u;
+	u.node = node;
+	return u;
 }
 
 } // namespace aw::rts

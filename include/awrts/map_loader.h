@@ -9,14 +9,15 @@
  */
 #ifndef awrts_map_loader_h
 #define awrts_map_loader_h
+#include <awrts/units/unit_factory.h>
 #include <awrts/graphics/video_manager.h>
 #include <aw/utility/filesystem.h>
 
 namespace aw::rts {
 
 struct map_loader {
-	map_loader(graphics::video_manager& vm)
-		: vm{vm}
+	map_loader(graphics::video_manager& vm, unit_factory& fac)
+		: vm{vm}, factory{fac}
 	{}
 
 	bool load(fs::path const& map_path);
@@ -24,6 +25,9 @@ struct map_loader {
 private:
 	// FIXME: temportary hack until a permanent solution is implemented
 	graphics::video_manager& vm;
+
+	// TODO: wrap my head around this
+	unit_factory& factory;
 };
 
 } // namespace aw:;rts

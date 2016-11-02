@@ -68,18 +68,11 @@ int run_game(int c, char const* const* v)
 	init_video(video);
 
 	journal.info("main()", "Initializing game components.");
-	map_loader mapman{video};
+	unit_factory uf{video};
+	map_loader mapman{video, uf};
 	mapman.load("data/maps/dummy.hdf");
 
 	player pl{video};
-
-	unit_table units;
-	load_unit_types(units, "data/units.aw");
-
-	unit_factory uf{video};
-	unit u1 = uf.create_unit( *units["Btrk"] );
-
-
 
 	journal.info("main()", "Setting up main loop.");
 
@@ -96,6 +89,10 @@ int run_game(int c, char const* const* v)
 	journal.info("main()", "Main loop start.");
 	// std::cout << tick_time.count() << "\n";
 
+	// TODO: temporary
+	log_impl.set_source_filter( [] (string_view s) {
+		return s.find("update") == s.npos && s.find("render") == s.npos;
+	} );
 	nanoseconds elapsed = 0ns;
 
 	// TODO:
