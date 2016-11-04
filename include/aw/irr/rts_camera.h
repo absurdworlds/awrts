@@ -19,7 +19,7 @@ template<typename T>
 class line3d;
 }
 namespace irr::scene {
-class ISceneManager;
+class CSceneManager;
 class ICameraSceneNode;
 }
 
@@ -28,12 +28,12 @@ namespace graphics {
 
 //! Temporary solution for RTS camera
 struct rts_camera {
-	rts_camera(irr::scene::ISceneManager* scmgr, irr::gui::ICursorControl* ccon);
+	rts_camera(irr::scene::CSceneManager* scmgr, irr::gui::ICursorControl* ccon);
 	~rts_camera();
 	irr::core::line3d<float> cast_ray(int x, int y);
 
 
-	irr::scene::ISceneManager* scmgr;
+	irr::scene::CSceneManager* scmgr;
 	irr::scene::ICameraSceneNode* cam;
 };
 

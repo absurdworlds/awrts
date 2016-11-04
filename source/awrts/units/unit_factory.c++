@@ -11,7 +11,7 @@
 #include <awrts/graphics/video_manager.h>
 
 #include <Irrlicht/IrrlichtDevice.h>
-#include <Irrlicht/ISceneManager.h>
+#include <Irrlicht/CSceneManager.h>
 #include <Irrlicht/IAnimatedMeshSceneNode.h>
 namespace aw::rts {
 static fs::path const model_path = "data/models/units";
@@ -24,7 +24,7 @@ unit unit_factory::create_unit(unit_type const& type)
 	using namespace irr;
 	using namespace irr::scene;
 	IrrlichtDevice& dev = vm.irr_device();
-	ISceneManager* scmgr = dev.getSceneManager();
+	CSceneManager* scmgr = dev.getSceneManager();
 	IAnimatedMesh* mesh = scmgr->getMesh(path.string().data());
 	IAnimatedMeshSceneNode* node = scmgr->addAnimatedMeshSceneNode(mesh);
 

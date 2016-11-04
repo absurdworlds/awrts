@@ -50,12 +50,6 @@ namespace scene {
 			return ESNAT_CAMERA_FPS;
 		}
 		
-		//! Creates a clone of this animator.
-		/** Please note that you will have to drop
-		(IReferenceCounted::drop()) the returned pointer once you're
-		done with it. */
-		ISceneNodeAnimator* createClone(ISceneNode* node, ISceneManager* newManager=0) override;
-
 		//! Returns the speed of movement
 		f32 getMoveSpeed() const;
 

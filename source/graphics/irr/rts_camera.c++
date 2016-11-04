@@ -10,7 +10,7 @@
 #include <aw/irr/rts_camera.h>
 #include <aw/irr/CSceneNodeAnimatorCameraRTS.h>
 
-#include <Irrlicht/ISceneManager.h>
+#include <Irrlicht/CSceneManager.h>
 #include <Irrlicht/ISceneCollisionManager.h>
 #include <Irrlicht/ICursorControl.h>
 #include <Irrlicht/ICameraSceneNode.h>
@@ -20,7 +20,7 @@ using namespace irr::scene;
 using namespace irr::gui;
 
 namespace aw::graphics {
-rts_camera::rts_camera(ISceneManager* scmgr, ICursorControl* ccon)
+rts_camera::rts_camera(CSceneManager* scmgr, ICursorControl* ccon)
 	: scmgr{scmgr}
 {
 	cam = scmgr->addCameraSceneNode(0, vector3df{0}, vector3df{0});

@@ -17,7 +17,7 @@
 #include <aw/fileformat/hdf/parser.h>
 
 #include <Irrlicht/IrrlichtDevice.h>
-#include <Irrlicht/ISceneManager.h>
+#include <Irrlicht/CSceneManager.h>
 #include <Irrlicht/IAnimatedMeshSceneNode.h>
 #include <Irrlicht/ISceneCollisionManager.h>
 
@@ -28,7 +28,7 @@ namespace aw::rts {
 static fs::path const model_path = "data/models/";
 
 namespace {
-void parse_map_geometry_node(hdf::parser& parser, irr::scene::ISceneManager* scmgr)
+void parse_map_geometry_node(hdf::parser& parser, irr::scene::CSceneManager* scmgr)
 {
 	using namespace std::string_literals;
 
@@ -109,7 +109,7 @@ bool map_loader::load(fs::path const& map_path)
 	hdf::parser parser{stream, &log_impl};
 
 	irr::IrrlichtDevice& dev = vm.irr_device();
-	irr::scene::ISceneManager* scmgr = dev.getSceneManager();
+	irr::scene::CSceneManager* scmgr = dev.getSceneManager();
 
 	// (old TODO: global lighting manager?)
 	scmgr->setAmbientLight(irr::video::SColorf(0.35f,0.35f,0.35f,0.35f));

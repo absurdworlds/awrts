@@ -5,7 +5,7 @@
 
 #include <Irrlicht/IVideoDriver.h>
 #include <Irrlicht/ICursorControl.h>
-#include <Irrlicht/ISceneManager.h>
+#include <Irrlicht/CSceneManager.h>
 #include <Irrlicht/ISceneCollisionManager.h>
 #include <Irrlicht/ICameraSceneNode.h>
 
@@ -133,7 +133,7 @@ namespace scene {
 			return;
 		}
 
-		scene::ISceneManager * scnmgr = camera->getSceneManager();
+		scene::CSceneManager* scnmgr = camera->getSceneManager();
 		if (scnmgr && scnmgr->getActiveCamera() != camera)
 		{
 			return;
@@ -382,18 +382,6 @@ namespace scene {
 		angle_close = a;
 	}
 
-
-	ISceneNodeAnimator* CSceneNodeAnimatorCameraRTS::createClone(ISceneNode* node, ISceneManager* newManager)
-	{
-		CSceneNodeAnimatorCameraRTS* newAnimator = new CSceneNodeAnimatorCameraRTS{CursorControl};
-		newAnimator->setMoveSpeed(getMoveSpeed());
-		newAnimator->setRotateSpeed(getRotateSpeed());
-		newAnimator->setZoomSpeed(getZoomSpeed());
-		newAnimator->setDistance(getDistance());
-		newAnimator->setAngle(getAngle());
-		newAnimator->setAngleClose(getAngleClose());
-		return newAnimator;
-	}
 
 	
 	/*//! Sets the keyboard mapping for this animator

@@ -13,7 +13,7 @@
 
 #include <aw/config.h>
 
-#include <Irrlicht/ISceneManager.h>
+#include <Irrlicht/CSceneManager.h>
 #if (AW_PLATFORM == AW_PLATFORM_WIN32)
 #include <Irrlicht/CIrrDeviceWin32.h>
 #elif (AW_PLATFORM_SPECIFIC == AW_PLATFORM_OSX)
