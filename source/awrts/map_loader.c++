@@ -18,7 +18,7 @@
 
 #include <Irrlicht/IrrlichtDevice.h>
 #include <Irrlicht/CSceneManager.h>
-#include <Irrlicht/IAnimatedMeshSceneNode.h>
+#include <Irrlicht/CAnimatedMeshSceneNode.h>
 #include <Irrlicht/ISceneCollisionManager.h>
 
 #include <vector>
@@ -47,8 +47,8 @@ void parse_map_geometry_node(hdf::parser& parser, irr::scene::CSceneManager* scm
 
 	using namespace irr::scene;
 	fs::path path = model_path/model_name;
-	IAnimatedMesh* mesh = scmgr->getMesh(path.string().data());
-	IAnimatedMeshSceneNode* node = scmgr->addAnimatedMeshSceneNode(mesh);
+	SAnimatedMesh* mesh = scmgr->getMesh(path.string().data());
+	CAnimatedMeshSceneNode* node = scmgr->addAnimatedMeshSceneNode(mesh);
 	// node->addShadowVolumeSceneNode();
 }
 

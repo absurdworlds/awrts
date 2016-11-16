@@ -9,10 +9,12 @@
 #include <aw/utility/filesystem.h>
 #include <awrts/units/unit_factory.h>
 #include <awrts/graphics/video_manager.h>
+#include <awrts/graphics/obj_loader.h>
 
 #include <Irrlicht/IrrlichtDevice.h>
 #include <Irrlicht/CSceneManager.h>
-#include <Irrlicht/IAnimatedMeshSceneNode.h>
+#include <Irrlicht/CAnimatedMeshSceneNode.h>
+#include <Irrlicht/CMeshManipulator.h>
 namespace aw::rts {
 static fs::path const model_path = "data/models/units";
 
@@ -25,8 +27,9 @@ unit unit_factory::create_unit(unit_type const& type)
 	using namespace irr::scene;
 	IrrlichtDevice& dev = vm.irr_device();
 	CSceneManager* scmgr = dev.getSceneManager();
-	IAnimatedMesh* mesh = scmgr->getMesh(path.string().data());
-	IAnimatedMeshSceneNode* node = scmgr->addAnimatedMeshSceneNode(mesh);
+	SAnimatedMesh* mesh = graphics::load_obj( path );
+	scmgr->getMeshManipulator()->recalculateNormals( mesh->getMeshBuffer( 0 ) );
+	CAnimatedMeshSceneNode* node = scmgr->addAnimatedMeshSceneNode(mesh);
 
 	// FIXME: temporary
 	unit u;

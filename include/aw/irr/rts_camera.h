@@ -20,7 +20,7 @@ class line3d;
 }
 namespace irr::scene {
 class CSceneManager;
-class ICameraSceneNode;
+class CCameraSceneNode;
 }
 
 namespace aw {
@@ -34,7 +34,7 @@ struct rts_camera {
 
 
 	irr::scene::CSceneManager* scmgr;
-	irr::scene::ICameraSceneNode* cam;
+	irr::scene::CCameraSceneNode* cam;
 };
 
 } // namespace graphics

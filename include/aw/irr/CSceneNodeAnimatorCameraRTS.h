@@ -11,6 +11,9 @@
 #include <chrono>
 
 namespace irr {
+namespace scene {
+class CCameraSceneNode;
+}
 namespace gui
 {
 	class ICursorControl;
@@ -116,7 +119,7 @@ namespace scene {
 
 		time_point last_update;
 
-		//scene::ICameraSceneNode* OldCamera;
+		scene::CCameraSceneNode* camera = nullptr;
 		//core::vector3df OldTarget;
 		//core::vector3df LastCameraTarget;
 		

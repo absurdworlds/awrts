@@ -1,13 +1,15 @@
 // This is an extension for the "Irrlicht Engine".
 // See copyright notice in irrlicht.h
 
+#include <iostream>
 #include <aw/irr/CSceneNodeAnimatorCameraRTS.h>
 
 #include <Irrlicht/IVideoDriver.h>
 #include <Irrlicht/ICursorControl.h>
 #include <Irrlicht/CSceneManager.h>
 #include <Irrlicht/ISceneCollisionManager.h>
-#include <Irrlicht/ICameraSceneNode.h>
+#include <Irrlicht/CCameraSceneNode.h>
+#include <Irrlicht/CIrrDeviceLinux.h>
 
 namespace irr {
 namespace scene {
@@ -125,7 +127,7 @@ namespace scene {
 			return;
 		}
 		
-		ICameraSceneNode* camera = static_cast<ICameraSceneNode*>(node);
+		camera = static_cast<CCameraSceneNode*>(node);
 
 		// If the camera isn't the active camera, and receiving input, then don't process it.
 		if (!camera->isInputReceiverEnabled())
@@ -170,7 +172,7 @@ namespace scene {
 				|| (mousepos.Y > (screen.Height - 0)));
 		
 		
-		core::plane3df plane;
+		core::plane3df plane{ {0,1,0}, 0 };
 
 		core::line3df ray_new = colman->getRayFromScreenCoordinates(mousepos, camera);
 

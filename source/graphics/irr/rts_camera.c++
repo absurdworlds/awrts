@@ -13,7 +13,7 @@
 #include <Irrlicht/CSceneManager.h>
 #include <Irrlicht/ISceneCollisionManager.h>
 #include <Irrlicht/ICursorControl.h>
-#include <Irrlicht/ICameraSceneNode.h>
+#include <Irrlicht/CCameraSceneNode.h>
 
 using namespace irr::core;
 using namespace irr::scene;
