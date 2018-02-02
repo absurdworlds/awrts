@@ -16,6 +16,8 @@
 #include <aw/physics/DebugDrawer.h>
 #include "PhysicsWorld.h"
 
+
+
 namespace aw {
 namespace physics {
 namespace bullet {
@@ -45,6 +47,18 @@ private:
 	graphics::RenderingDevice * vmgr_;
 };
 } // namespace bullet
+
+class DebugDrawer /*: public IRenderable*/ {
+public:
+	virtual DebugDrawer() = default;
+
+	virtual void render() = 0;
+
+	virtual void setWorld(PhysicsWorld* world) = 0;
+
+	//! Internal implementation details
+	DECLARE_HIDDEN_DETAILS(DebugDrawer);
+};
 
 class DebugDrawer::Details {
 public:

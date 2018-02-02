@@ -24,10 +24,66 @@ namespace aw {
 namespace physics {
 namespace bullet {
 
-class RigidBody : public physics::RigidBody {
+//! Contains information needed to construct a rigid body
+struct RigidBodyConstructionInfo {
+public:
+	//! Mass of the body
+	//! If mass is zero, body is static
+	f32 mass;
+
+	// 
+	CollisionFilter collisionFilterInfo;
+
+	// NYI
+	// const CollisionShape shape;
+
+	f32 linearDamping;
+	f32 angularDamping;
+
+	// NYI
+	// Vector3d<f32> localInertia;
+
+	// 
+	// MotionState* motionState;
+	Vector3d<f32> position;
+	//Vector4d<f32> rotation;
+
+	f32 friction;
+	f32 rollingFriction;
+	f32 restitution;
+
+	//! Default construction parameters
+	RigidBodyConstructionInfo()
+		: mass(1.0f),
+		linearDamping(0.0f),
+		angularDamping(0.0f),
+		position(0.0f, 0.0f, 0.0f),
+		friction(0.5f),
+		rollingFriction(0.0f),
+		restitution(0.0f)
+	{
+	}
+
+	//! Construct specifying mass
+	RigidBodyConstructionInfo(f32 mass)
+		: mass(mass),
+		linearDamping(0.0f),
+		angularDamping(0.0f),
+		position(0.0f, 0.0f, 0.0f),
+		friction(0.5f),
+		rollingFriction(0.0f),
+		restitution(0.0f)
+	{
+	}
+};
+
+
+class RigidBody  {
 public:
 	RigidBody(btRigidBody* body);
+	virtual ~RigidBody() = default;
 
+	//! Set motion state \see MotionState
 	virtual void setMotionState(MotionState* motionState);
 
 	virtual void setPosition(Vector3d<f32> pos);

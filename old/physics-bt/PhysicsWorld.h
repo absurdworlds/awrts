@@ -17,11 +17,20 @@
 
 namespace aw {
 namespace physics {
-// FIXME!!!!
-class PhysicsWorld::Details {
-public:
-	btDynamicsWorld* world;
+//! Helper struct to filter objects by collision groups
+struct CollisionFilter {
+	CollisionFilter()
+		: group(0), mask(0)
+	{}
+	CollisionFilter(u16 colGroup, u16 bitMask)
+		: group(colGroup), mask(bitMask)
+	{
+	}
+
+	u16 group;
+	u16 mask;
 };
+
 
 namespace bullet {
 class PhysicsWorld : public physics::PhysicsWorld {
@@ -40,7 +49,8 @@ public:
 	virtual void removeBody(RigidBody* body);
 	virtual void removeObject(CollisionObject* object);
 
-	//! TODO: virtual DebugDrawer* createDebugDrawer();
+	//TODO: virtual DebugDrawer* createDebugDrawer();
+	// this will allow to remove at least DebugDrawer's 'hidden details'
 	virtual void setDebugDrawer(DebugDrawer* drawer);
 
 	virtual void castRay(Vector3d<f32> from, Vector3d<f32> to,
@@ -54,10 +64,6 @@ public:
 
 	btScalar getDeltaTime();
 
-	virtual PhysicsWorld::Details* getDetails() 
-	{
-		return &details_;
-	}
 private:
 	DebugDrawer* debugDrawer_;
 

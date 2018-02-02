@@ -12,6 +12,18 @@
 
 namespace aw {
 namespace physics {
+class DebugDrawer /*: public IRenderable*/ {
+public:
+	virtual DebugDrawer() = default;
+
+	virtual void render() = 0;
+
+	virtual void setWorld(PhysicsWorld* world) = 0;
+
+	//! Internal implementation details
+	DECLARE_HIDDEN_DETAILS(DebugDrawer);
+};
+
 namespace bullet {
 
 DebugDraw::DebugDraw(graphics::RenderingDevice* renderer)
