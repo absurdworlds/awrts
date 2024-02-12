@@ -17,7 +17,7 @@ namespace io {
  */
 class AW_IO_EXP ReadFile : private File {
 public:
-	ReadFile (std::string const& path)
+	ReadFile(std::string const& path)
 		: File(path, File::Read)
 	{
 	}

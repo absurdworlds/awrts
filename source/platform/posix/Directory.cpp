@@ -16,7 +16,7 @@
 namespace aw {
 namespace io {
 
-Directory* openDirectory (std::string path)
+Directory* openDirectory(std::string path)
 {
 	Directory* dir = new impl_::Directory(path);
 
@@ -28,21 +28,21 @@ Directory* openDirectory (std::string path)
 }
 
 namespace impl_ {
-Directory::Directory (std::string const& path)
+Directory::Directory(std::string const& path)
 : dir_(0), path_(path)
 {
 	this->open();
 }
 
 
-Directory::~Directory ()
+Directory::~Directory()
 {
 	if(isOpen()) {
 		closedir(dir_);
 	}
 }
 
-void Directory::open ()
+void Directory::open()
 {
 	if (path_.size() == 0) {
 		dir_ = 0;
@@ -60,7 +60,7 @@ void Directory::open ()
 #endif
 }
 
-i32 Directory::read (Dirent& result)
+i32 Directory::read(Dirent& result)
 {
 	if (!isOpen()) {
 		return -1;
@@ -97,17 +97,17 @@ i32 Directory::read (Dirent& result)
 	return 1;
 }
 
-void Directory::seek (u32 offset)
+void Directory::seek(u32 offset)
 {
 	seekdir(dir_, offset);
 }
 
-void Directory::rewind ()
+void Directory::rewind()
 {
 	rewinddir(dir_);
 }
 
-u32 Directory::tell () const
+u32 Directory::tell() const
 {
 	return telldir(dir_);
 }
@@ -117,7 +117,7 @@ u32 Directory::getSize() const
 	return size_;
 }
 */
-std::string const& Directory::getPath () const
+std::string const& Directory::getPath() const
 {
 	return path_;
 }
