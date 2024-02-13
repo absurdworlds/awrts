@@ -15,9 +15,7 @@
 #include <aw/types/string_view.h>
 #include <aw/graphics/gl/command_list.h>
 
-namespace sf {
-class Window;
-}
+class GLFWwindow;
 
 namespace aw {
 namespace graphics {
@@ -36,20 +34,10 @@ struct video_manager {
 	video_manager(u32 resX, u32 resY, bool fullscreen, bool vsync);
 
 	video_manager(video_manager const&) = delete;
-	video_manager(video_manager&& other)
-	{
-		wnd  = std::move(other.wnd);
-		ctx  = std::move(other.ctx);
-		cmds = std::move(other.cmds);
-	}
+	video_manager(video_manager&& other);
 
 	video_manager& operator=(video_manager const&) = delete;
-	video_manager& operator=(video_manager&& other)
-	{
-		wnd  = std::move(other.wnd);
-		ctx  = std::move(other.ctx);
-		cmds = std::move(other.cmds);
-	}
+	video_manager& operator=(video_manager&& other);
 
 	~video_manager();
 
@@ -65,7 +53,7 @@ struct video_manager {
 private:
 	void reshape(int x, int y);
 
-	std::unique_ptr<sf::Window> wnd;
+	GLFWwindow* wnd;
 
 	struct context;
 	std::unique_ptr<context> ctx;

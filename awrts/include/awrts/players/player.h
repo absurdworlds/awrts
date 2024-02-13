@@ -14,7 +14,7 @@ namespace aw::rts {
 
 struct player {
 	player(graphics::video_manager& vm);
-	graphics::rts_camera cam;
+	//graphics::rts_camera cam;
 };
 
 } // namespace aw::rts

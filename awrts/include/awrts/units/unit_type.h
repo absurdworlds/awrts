@@ -10,6 +10,7 @@
 #define awrts_unit_type_h
 #include <aw/types/types.h>
 #include <aw/types/string_view.h>
+#include <string>
 namespace aw::rts {
 
 /*

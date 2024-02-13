@@ -11,7 +11,7 @@
 #define awrts_map_loader_h
 #include <awrts/units/unit_factory.h>
 #include <awrts/graphics/video_manager.h>
-#include <aw/utility/filesystem.h>
+#include <aw/io/filesystem.h>
 
 namespace aw::rts {
 

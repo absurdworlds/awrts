@@ -23,7 +23,7 @@ class SAnimatedMesh;
 namespace aw {
 namespace graphics {
 
-irr::scene::SAnimatedMesh* load_obj( fs::path const& path );
+void* load_obj( fs::path const& path );
 
 } // namespace graphics
 } // namespace aw

@@ -9,16 +9,16 @@
 #include <awrts/units/unit_table.h>
 
 #include <aw/io/input_file_stream.h>
-#include <aw/fileformat/hdf/parser.h>
+#include <aw/doc/parser.h>
 
 using namespace std::string_literals;
 namespace aw::rts {
 namespace {
-void parse_text_node(hdf::parser& file, decltype(unit_type::text)& text)
+void parse_text_node(doc::parser& file, decltype(unit_type::text)& text)
 {
 	while (auto obj = file.read()) {
 		std::string const& name = obj.name;
-		if (obj.kind == hdf::object::node) {
+		if (obj.kind == doc::object::node) {
 			file.skip_node();
 			continue;
 		}
@@ -31,11 +31,11 @@ void parse_text_node(hdf::parser& file, decltype(unit_type::text)& text)
 	}
 }
 
-void parse_visual_node(hdf::parser& file, decltype(unit_type::visual)& visual)
+void parse_visual_node(doc::parser& file, decltype(unit_type::visual)& visual)
 {
 	while (auto obj = file.read()) {
 		std::string const& name = obj.name;
-		if (obj.kind == hdf::object::node) {
+		if (obj.kind == doc::object::node) {
 			file.skip_node();
 			continue;
 		}
@@ -44,12 +44,12 @@ void parse_visual_node(hdf::parser& file, decltype(unit_type::visual)& visual)
 	}
 }
 
-void parse_gui_node(hdf::parser& file, decltype(unit_type::gui)& gui)
+void parse_gui_node(doc::parser& file, decltype(unit_type::gui)& gui)
 {
 	while (auto obj = file.read()) {
 		std::string const& name = obj.name;
 
-		if (obj.kind == hdf::object::node) {
+		if (obj.kind == doc::object::node) {
 			file.skip_node();
 			continue;
 		}
@@ -59,12 +59,12 @@ void parse_gui_node(hdf::parser& file, decltype(unit_type::gui)& gui)
 	}
 }
 
-void parse_movement_node(hdf::parser& file, decltype(unit_type::movement)& mov)
+void parse_movement_node(doc::parser& file, decltype(unit_type::movement)& mov)
 {
 	while (auto obj = file.read()) {
 		std::string const& name = obj.name;
 
-		if (obj.kind == hdf::object::node) {
+		if (obj.kind == doc::object::node) {
 			file.skip_node();
 			continue;
 		}
@@ -91,11 +91,11 @@ void parse_movement_node(hdf::parser& file, decltype(unit_type::movement)& mov)
 	}
 }
 
-void parse_combat_node(hdf::parser& file, decltype(unit_type::combat)& combat)
+void parse_combat_node(doc::parser& file, decltype(unit_type::combat)& combat)
 {
 	while (auto obj = file.read()) {
 		std::string const& name = obj.name;
-		if (obj.kind == hdf::object::node) {
+		if (obj.kind == doc::object::node) {
 			file.skip_node();
 			continue;
 		}
@@ -106,11 +106,11 @@ void parse_combat_node(hdf::parser& file, decltype(unit_type::combat)& combat)
 	}
 }
 
-void parse_pf_node(hdf::parser& file, decltype(unit_type::pathfinding)& pf)
+void parse_pf_node(doc::parser& file, decltype(unit_type::pathfinding)& pf)
 {
 	while (auto obj = file.read()) {
 		std::string const& name = obj.name;
-		if (obj.kind == hdf::object::node) {
+		if (obj.kind == doc::object::node) {
 			file.skip_node();
 			continue;
 		}
@@ -121,13 +121,13 @@ void parse_pf_node(hdf::parser& file, decltype(unit_type::pathfinding)& pf)
 	}
 }
 
-void parse_unit_node(unit_table& table, hdf::parser& file)
+void parse_unit_node(unit_table& table, doc::parser& file)
 {
 	unit_type type;
 
 	while (auto obj = file.read()) {
 		std::string const& name = obj.name;
-		if (obj.kind == hdf::object::node) {
+		if (obj.kind == doc::object::node) {
 			if (name == "text") {
 				parse_text_node(file, type.text);
 			} else if (name == "visual") {
@@ -143,7 +143,7 @@ void parse_unit_node(unit_table& table, hdf::parser& file)
 			} else {
 				file.skip_node();
 			}
-		} else if (obj.kind == hdf::object::value) {
+		} else if (obj.kind == doc::object::value) {
 			if (name == "id") {
 				std::string const* s = obj.val.get<std::string>();
 				if (!s || s->size() < 4) {
@@ -165,11 +165,11 @@ void parse_unit_node(unit_table& table, hdf::parser& file)
 void load_unit_types(unit_table& table, fs::path const& path)
 {
 	io::input_file_stream stream{path};
-	hdf::parser file{stream};
-	hdf::object obj;
+	doc::parser file{stream};
+	doc::object obj;
 	while (file.read(obj)) {
 		std::string const& name = obj.name;
-		if (obj.kind == hdf::object::node) {
+		if (obj.kind == doc::object::node) {
 			if (name == "unit") {
 				parse_unit_node(table, file);
 			} else {

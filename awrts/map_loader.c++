@@ -14,12 +14,7 @@
 #include <aw/math/vector2d.h>
 
 #include <aw/io/input_file_stream.h>
-#include <aw/fileformat/hdf/parser.h>
-
-#include <Irrlicht/IrrlichtDevice.h>
-#include <Irrlicht/CSceneManager.h>
-#include <Irrlicht/CAnimatedMeshSceneNode.h>
-#include <Irrlicht/ISceneCollisionManager.h>
+#include <aw/doc/parser.h>
 
 #include <vector>
 
@@ -28,27 +23,24 @@ namespace aw::rts {
 static fs::path const model_path = "data/models/";
 
 namespace {
-void parse_map_geometry_node(hdf::parser& parser, irr::scene::CSceneManager* scmgr)
+void parse_map_geometry_node(doc::parser& parser)
 {
 	using namespace std::string_literals;
 
 	fs::path model_name;
 	while (auto obj = parser.read()) {
-		hdf::object_kind&  type = obj.kind;
+		doc::object_kind&  type = obj.kind;
 		std::string const& name = obj.name;
 
-		if (type == hdf::object::value) {
+		if (type == doc::object::value) {
 			if (name == "model-name")
 				model_name = obj.val.try_get( ""s );
-		} else if (type == hdf::object::node) {
+		} else if (type == doc::object::node) {
 			parser.skip_node();
 		}
 	}
 
-	using namespace irr::scene;
 	fs::path path = model_path/model_name;
-	SAnimatedMesh* mesh = scmgr->getMesh(path.string().data());
-	CAnimatedMeshSceneNode* node = scmgr->addAnimatedMeshSceneNode(mesh);
 	// node->addShadowVolumeSceneNode();
 }
 
@@ -58,14 +50,14 @@ struct spawn_node {
 	float facing;
 };
 
-void parse_unit_node(hdf::parser& parser, std::vector<spawn_node>& out)
+void parse_unit_node(doc::parser& parser, std::vector<spawn_node>& out)
 {
 	spawn_node tmp;
 	while (auto obj = parser.read()) {
-		hdf::object_kind&  type = obj.kind;
+		doc::object_kind&  type = obj.kind;
 		std::string const& name = obj.name;
 
-		if (type == hdf::object::value) {
+		if (type == doc::object::value) {
 			// FIXME: temporary, 
 			if (name == "id") {
 				if (obj.val.get(tmp.type))
@@ -93,7 +85,7 @@ void parse_unit_node(hdf::parser& parser, std::vector<spawn_node>& out)
 			// instead of spawning bunch of units at 0,0
 			parser.skip_node();
 			return;
-		} else if (type == hdf::object::node) {
+		} else if (type == doc::object::node) {
 			parser.skip_node();
 		}
 	}
@@ -106,27 +98,26 @@ void parse_unit_node(hdf::parser& parser, std::vector<spawn_node>& out)
 bool map_loader::load(fs::path const& map_path)
 {
 	io::input_file_stream stream{map_path};
-	hdf::parser parser{stream, &log_impl};
-
-	irr::IrrlichtDevice& dev = vm.irr_device();
-	irr::scene::CSceneManager* scmgr = dev.getSceneManager();
+	doc::parser parser{stream, &log_impl};
 
 	// (old TODO: global lighting manager?)
+#if 0
 	scmgr->setAmbientLight(irr::video::SColorf(0.35f,0.35f,0.35f,0.35f));
 
 	irr::scene::ILightSceneNode* light = scmgr->addLightSceneNode(0,
 		irr::core::vector3df(100, 1000, 100),
 		irr::video::SColorf(0.95f, 0.95f, 1.00f, 0.0f), 2800.0f);
+#endif
 
 	std::vector<spawn_node> units;
 
-	hdf::object obj;
+	doc::object obj;
 	while (parser.read(obj)) {
-		hdf::object_kind&  type = obj.kind;
+		doc::object_kind&  type = obj.kind;
 		std::string const& name = obj.name;
-		if (type == hdf::object::node) {
+		if (type == doc::object::node) {
 			if (name == "geometry") {
-				parse_map_geometry_node(parser, scmgr);
+				parse_map_geometry_node(parser);
 			} else if (name == "unit") {
 				parse_unit_node(parser, units);
 			} else {
@@ -153,9 +144,11 @@ bool map_loader::load(fs::path const& map_path)
 		// there should be a 'map' object with a 'spawn_unit' method
 		// (or… dunno, will see)
 		float h = type->movement.height;
-		unit.node->setPosition({node.pos[0], 0.0f, node.pos[1]});
-		unit.node->setRotation({0.0f, node.facing, 0.f});
+		//unit.node->setPosition({node.pos[0], 0.0f, node.pos[1]});
+		//unit.node->setRotation({0.0f, node.facing, 0.f});
 	}
+
+	return true;
 }
 
 } // namespace aw::rts

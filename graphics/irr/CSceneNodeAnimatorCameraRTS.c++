@@ -66,6 +66,28 @@ namespace scene {
 				NewZoom -= event.MouseInput.Wheel * ZoomSpeed * (CurrentZoom / (MaxZoom * MinZoom));
 				break;
 			/*case EMIE_LMOUSE_PRESSED_DOWN:
+	{
+		core::plane3df plane{ {0,1,0}, 0 };
+		if (!camera) break;
+
+		scene::CSceneManager* scnmgr = camera->getSceneManager();
+		scene::ISceneCollisionManager* colman = scnmgr->getSceneCollisionManager();
+		core::line3df ray = colman->getRayFromScreenCoordinates(mousepos, camera);
+
+		core::vector3df pos_new;
+		plane.getIntersectionWithLine(ray.start, ray.getVector(), pos_new);
+
+		auto pvec = [] (auto v) {
+			std::cout << '(' << v.X << ' ' << v.Y << ' ' << v.Z << ')' << '\n';
+		};
+		std::cout << "sta:";
+		pvec(ray.start);
+		std::cout << "end:";
+		pvec(ray.end);
+		std::cout << "hit:";
+		pvec(pos_new);
+		std::cout << std::endl;
+	}
 				break;
 			case EMIE_MMOUSE_PRESSED_DOWN
 			case EMIE_MMOUSE_LEFT_UP:
@@ -194,9 +216,20 @@ namespace scene {
 				plane.getIntersectionWithLine(ray_old.start, ray_old.getVector(), pos_old);
 				plane.getIntersectionWithLine(ray_new.start, ray_new.getVector(), pos_new);
 
-				translate.X += pos_old.X - pos_new.X;
-				translate.Z += pos_old.Z - pos_new.Z;
-				
+				core::vector3df delta = pos_old - pos_new;
+				/*f32 speed = TranslateSpeed * time_delta.count();
+				delta.normalize();
+				delta *= speed;*/
+				delta /= 10;
+				translate.X += delta.X;
+				translate.Z += delta.Z;
+
+				std::cout << "---------\n";
+				std::cout << pos_old.X << ' ' << pos_old.Y << ' ' << pos_old.Z << '\n';
+				std::cout << pos_new.X << ' ' << pos_new.Y << ' ' << pos_new.Z << '\n';
+				std::cout << delta.X << ' ' << delta.Y << ' ' << delta.Z << '\n';
+
+				std::cout << "---------\n";
 			}
 			
 			if (outwindow)

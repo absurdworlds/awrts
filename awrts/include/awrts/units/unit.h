@@ -11,18 +11,10 @@
 #include <awrts/units/unit_type.h>
 #include <awrts/component.h>
 
-namespace irr {
-namespace scene {
-class ISceneNode;
-}
-}
-
-namespace aw {
-namespace rts {
+namespace aw::rts {
 struct unit : entity {
 	// FIXME: temporary, until graphics component is implemented
-	irr::scene::ISceneNode* node;
+	//irr::scene::ISceneNode* node;
 };
-} // namespace rts
-} // namespace aw
+} // namespace aw::rts
 #endif//awrts_unit_table_h

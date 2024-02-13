@@ -18,11 +18,11 @@
 namespace aw {
 namespace graphics {
 
-using obj_cache = std::map< fs::path, SAnimatedMesh* >;
+using obj_cache = std::map< fs::path, void* >;
 
 static obj_cache cache;
 
-SAnimatedMesh* load_obj( fs::path const& path )
+auto load_obj( fs::path const& path ) -> void*
 {
 	auto iter = cache.find( path );
 	if (iter != end(cache))
@@ -31,6 +31,7 @@ SAnimatedMesh* load_obj( fs::path const& path )
 	io::input_file_stream file{ path };
 	auto mesh = obj::mesh::parse( file );
 
+#if 0
 	std::vector< S3DVertex > verts;
 	std::vector< unsigned short > faces;
 
@@ -64,6 +65,8 @@ SAnimatedMesh* load_obj( fs::path const& path )
 	cache[path] = animMesh;
 
 	return animMesh;
+#endif
+	return nullptr;
 }
 
 

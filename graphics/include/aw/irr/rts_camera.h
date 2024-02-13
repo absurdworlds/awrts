@@ -11,32 +11,13 @@
 #define aw_irr_rts_camera_h
 #include <awrts/graphics/video_manager.h>
 
-namespace irr::gui {
-class ICursorControl;
-}
-namespace irr::core {
-template<typename T>
-class line3d;
-}
-namespace irr::scene {
-class CSceneManager;
-class CCameraSceneNode;
-}
-
-namespace aw {
-namespace graphics {
+namespace aw::graphics {
 
 //! Temporary solution for RTS camera
 struct rts_camera {
-	rts_camera(irr::scene::CSceneManager* scmgr, irr::gui::ICursorControl* ccon);
+	rts_camera();
 	~rts_camera();
-	irr::core::line3d<float> cast_ray(int x, int y);
-
-
-	irr::scene::CSceneManager* scmgr;
-	irr::scene::CCameraSceneNode* cam;
 };
 
-} // namespace graphics
-} // namespace aw
+} // namespace aw::graphics
 #endif//aw_irr_rts_camera_h

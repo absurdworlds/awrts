@@ -12,8 +12,8 @@ aw_add_library(awrts-lib STATIC
 
 target_link_libraries(awrts-lib
 	PUBLIC
+		awrts-graphics
 		aw::log
-		aw::graphics
 		aw::io
 		aw::doc)
 
@@ -22,5 +22,4 @@ add_executable(awrts
 
 target_link_libraries(awrts
 	PUBLIC
-		awrts-graphics
 		awrts-lib)

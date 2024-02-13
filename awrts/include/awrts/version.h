@@ -3,29 +3,27 @@
 #include <aw/utility/to_string.h>
 #define AWRTS_BUILD_STRING "Sranton Wars"
 
-namespace aw {
-namespace rts {
+namespace aw::rts {
 
 constexpr struct {
 	unsigned short num[4];
 	char suffix;
-} version {0, 0, 0, 0, 'a'};
+} version {{0, 0, 0, 0}, 'a'};
 
 
-template<typename Formatter = format::pretty_print>
+template<typename Formatter = formatter::pretty_print>
 std::string to_string(decltype(version) ver, Formatter&& fmt = Formatter{})
 {
-	using namespace sv_literals;
+	using namespace std::string_view_literals;
 	fmt.convert(ver.num[0]);
-	fmt.literal("."_s);
+	fmt.literal("."sv);
 	fmt.convert(ver.num[1]);
-	fmt.literal("."_s);
+	fmt.literal("."sv);
 	fmt.convert(ver.num[2]);
-	fmt.literal("."_s);
+	fmt.literal("."sv);
 	fmt.convert(ver.num[3]);
 	fmt.convert(ver.suffix);
 	return fmt;
 }
-} // namespace rts
-} // namespace aw
+} // namespace aw::rts
 #endif//awrts_version_h
