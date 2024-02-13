@@ -7,22 +7,13 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <awrts/logging.h>
+#include <awrts/graphics/logging.h>
 #include <awrts/graphics/obj_loader.h>
 #include <aw/fileformat/obj/loader.h>
 #include <aw/io/input_file_stream.h>
 
-#include <Irrlicht/CSceneManager.h>
-#include <Irrlicht/SMesh.h>
-#include <Irrlicht/SAnimatedMesh.h>
-#include <Irrlicht/CMeshBuffer.h>
-#include "irr/logger.h"
 #include <map>
 #include <memory>
-
-using namespace irr;
-using namespace irr::scene;
-using namespace irr::video;
 
 namespace aw {
 namespace graphics {

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19)
 
-project(awscript VERSION 0)
+project(awrts VERSION 0)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
@@ -20,8 +20,6 @@ endif()
 
 set(AW_IMPORT_MACROS ON)
 find_package(awlib)
-
-option(AWSCRIPT_MAKE_TESTS "Build test executables" ON)
 
 add_subdirectory(graphics)
 add_subdirectory(awgame)

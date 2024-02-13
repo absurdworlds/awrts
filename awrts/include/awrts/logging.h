@@ -11,18 +11,13 @@
 #define awrts_logging_h
 #include <aw/log/log_provider.h>
 #include <aw/log/log_filter.h>
-namespace aw {
-namespace graphics {
-extern log_provider journal;
-} // namespace graphics
-
-namespace rts {
+#include <awrts/graphics/logging.h>
+namespace aw::rts {
 extern log_provider journal;
 
 extern log_filter log_impl;
 
 void dump_core();
 void log_and_abort();
-} // namespace rts
-} // namespace aw
+} // namespace aw::rts
 #endif//awrts_logging_h

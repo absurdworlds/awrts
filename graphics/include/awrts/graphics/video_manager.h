@@ -9,21 +9,15 @@
  */
 #ifndef awrts_video_manager_h
 #define awrts_video_manager_h
+#include <memory>
 #include <stdexcept>
 #include <aw/types/types.h>
 #include <aw/types/string_view.h>
+#include <aw/graphics/gl/command_list.h>
 
-namespace irr {
-class IrrlichtDevice;
-namespace video {
-class VideoDriver;
+namespace sf {
+class Window;
 }
-namespace scene {
-class SceneManager;
-class AnimatedMesh;
-class SceneCollisionManager;
-}
-} // namespace irr
 
 namespace aw {
 namespace graphics {
@@ -42,10 +36,20 @@ struct video_manager {
 	video_manager(u32 resX, u32 resY, bool fullscreen, bool vsync);
 
 	video_manager(video_manager const&) = delete;
-	video_manager(video_manager&& other) { std::swap(dev, other.dev); }
+	video_manager(video_manager&& other)
+	{
+		wnd  = std::move(other.wnd);
+		ctx  = std::move(other.ctx);
+		cmds = std::move(other.cmds);
+	}
 
 	video_manager& operator=(video_manager const&) = delete;
-	video_manager& operator=(video_manager&& other) { std::swap(dev, other.dev); }
+	video_manager& operator=(video_manager&& other)
+	{
+		wnd  = std::move(other.wnd);
+		ctx  = std::move(other.ctx);
+		cmds = std::move(other.cmds);
+	}
 
 	~video_manager();
 
@@ -56,10 +60,15 @@ struct video_manager {
 	bool is_window_active();
 	void set_window_caption(string_view caption);
 
-	irr::IrrlichtDevice& irr_device() { return *dev; }
+	gl3::command_list cmds;
 
 private:
-	irr::IrrlichtDevice* dev = nullptr;
+	void reshape(int x, int y);
+
+	std::unique_ptr<sf::Window> wnd;
+
+	struct context;
+	std::unique_ptr<context> ctx;
 };
 } // namespace graphics
 } // namespace aw

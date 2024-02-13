@@ -1,4 +1,6 @@
 
+find_package(glfw3 3.3 REQUIRED)
+
 aw_add_library(awrts-graphics STATIC
 	GLOB_HEADERS
 	SOURCES
@@ -8,6 +10,7 @@ aw_add_library(awrts-graphics STATIC
 
 target_link_libraries(awrts-graphics
 	PUBLIC
+		glfw
 		aw::log
 		aw::graphics
 		aw::graphics-importer)

@@ -65,7 +65,7 @@ int run_game(int c, char const* const* v)
 	journal.info("main()", "Initializing graphics subsystem.");
 
 	graphics::journal.set_logger(&log_impl);
-	graphics::video_manager video{1066, 600, false, true};
+	graphics::video_manager video{1066, 600, false, false};
 	init_video(video);
 
 	journal.info("main()", "Initializing game components.");
@@ -152,9 +152,3 @@ int main(int c, char const* const* v)
 
 } // namespace rts
 } // namespace aw
-
-
-int main(int c, char** v)
-{
-	return aw::rts::main(c,v);
-}

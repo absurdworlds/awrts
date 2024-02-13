@@ -11,7 +11,7 @@
 #define awrts_obj_loader_h
 #include <stdexcept>
 #include <aw/types/types.h>
-#include <aw/utility/filesystem.h>
+#include <aw/io/filesystem.h>
 
 namespace irr {
 namespace scene {
