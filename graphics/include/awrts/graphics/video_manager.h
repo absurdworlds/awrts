@@ -31,7 +31,7 @@ struct initialization_failure : std::runtime_error {
 
 /*! Temporary video manager to initialize Irrlicht engine */
 struct video_manager {
-	video_manager(u32 resX, u32 resY, bool fullscreen, bool vsync);
+	video_manager(i32 resX, i32 resY, bool fullscreen, bool vsync);
 
 	video_manager(video_manager const&) = delete;
 	video_manager(video_manager&& other);

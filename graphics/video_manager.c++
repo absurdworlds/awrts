@@ -35,7 +35,7 @@ static void error_callback(int /*error*/, const char* description)
 	journal.error( "glfw", description );
 }
 
-video_manager::video_manager(u32 resX, u32 resY, bool fullscreen, bool vsync)
+video_manager::video_manager(i32 resX, i32 resY, bool fullscreen, bool vsync)
 {
 	glfwInit();
 
