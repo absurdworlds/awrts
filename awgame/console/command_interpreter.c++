@@ -14,7 +14,7 @@
 
 namespace aw {
 namespace console {
-
+#if 0
 auto command_interpreter::lookupCommand(ArgumentList& args) -> map_type::iterator
 {
 	if (args.empty())
@@ -119,5 +119,6 @@ void command_interpreter::removeCommand(std::string const& cmd)
 	auto args = string::split(cmd, " ");
 	commands.erase(args);
 }
+#endif
 } // namespace console
 } // namespace aw

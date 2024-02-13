@@ -7,24 +7,24 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef awgame_CommandInterpreter_H
-#define awgame_CommandInterpreter_H
-#include <string>
+#ifndef awgame_console_interpreter_h
+#define awgame_console_interpreter_h
+#include <aw/types/string_view.h>
 namespace aw {
 namespace console {
 /*!
  * Command interpreter interface for ingame/remote console.
  */
-struct Interpreter {
-	virtual ~Interpreter() = default;
+struct interpreter {
+	virtual ~interpreter() = default;
 
-	enum class Result {
+	enum class result {
 		//! Command was successfully processed
-		Success,
+		success,
 		//! Command was executed, but there was an error
-		Failure,
+		failure,
 		//! Command was not found
-		NotFound,
+		not_found,
 	};
 
 	/*!
@@ -32,14 +32,14 @@ struct Interpreter {
 	 * Messages produced by command are appended to \a out,
 	 * \return See enum Result.
 	 */
-	virtual Result processCommand(std::string const& cmd, std::string& out) = 0;
+	virtual result execute(string_view cmd, std::string& out) = 0;
 
 	/*!
 	 * Complete \a cmd to longest unambiguous string.
-	 * \return true if \a out was modified.
+	 * \return true if any completion was performed.
 	 */
-	virtual bool complete(std::string const& cmd, std::string& out) = 0;
+	virtual bool complete(string_view cmd, std::string& out) = 0;
 };
 } // namespace console
 } // namespace aw
-#endif//awgame_CommandInterpreter_H
+#endif//awgame_console_interpreter_h

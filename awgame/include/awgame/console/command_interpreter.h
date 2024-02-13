@@ -7,34 +7,34 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#ifndef awgame_DefaultInterpreter_H
-#define awgame_DefaultInterpreter_H
+#ifndef awgame_command_interpreter_h
+#define awgame_command_interpreter_h
 #include <map>
 #include <functional>
-#include <awgame/console/Interpreter.h>
+#include <awgame/console/interpreter.h>
 #include <aw/types/containers/flat_map.h>
 namespace aw {
 namespace console {
-struct DefaultInterpreter final : Interpreter {
-	using Interpreter::Result;
-	virtual ~DefaultInterpreter() = default;
+struct command_interpreter final : interpreter {
+	using interpreter::result;
+	virtual ~command_interpreter() = default;
 
-	Result processCommand(std::string const& cmd, std::string& out) override;
-	bool complete(std::string const& cmd, std::string& out) override;
+	result execute(string_view cmd, std::string& out) override;
+	bool complete(string_view cmd, std::string& out) override;
 
-	using ArgumentList = std::vector<std::string>;
+	using ArgumentList = std::vector<string_view>;
 	using EvalFunc = bool(ArgumentList const& cmd, std::string& out);
 	using EvalFunctor = std::function<EvalFunc>;
 
-	bool addCommand(std::string const& cmd, EvalFunctor func);
-	void removeCommand(std::string const& cmd);
+	bool add(std::string cmd, EvalFunctor func);
+	void remove(std::string cmd);
 
 private:
-	using map_type = aw::flat_map<ArgumentList, EvalFunctor>;
+	using map_type = aw::flat_map<std::string, EvalFunctor>;
 
-	auto lookupCommand(ArgumentList& cmd) -> map_type::iterator;
+	auto lookup(ArgumentList& cmd) -> map_type::iterator;
         map_type commands;
 };
 } // namespace console
 } // namespace aw
-#endif//awgame_DefaultInterpreter_H
+#endif//awgame_command_interpreter_h
