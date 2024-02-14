@@ -9,6 +9,7 @@
  */
 #ifndef awrts_map_loader_h
 #define awrts_map_loader_h
+#include "awrts/map/map.h"
 #include <awrts/units/unit_factory.h>
 #include <awrts/graphics/video_manager.h>
 #include <aw/io/filesystem.h>
@@ -20,7 +21,7 @@ struct map_loader {
 		: vm{vm}, factory{fac}
 	{}
 
-	bool load(fs::path const& map_path);
+	auto load(fs::path const& map_path) -> std::optional<map>;
 
 private:
 	// FIXME: temportary hack until a permanent solution is implemented

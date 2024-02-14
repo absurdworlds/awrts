@@ -4,6 +4,7 @@ aw_add_library(awrts-lib STATIC
 	SOURCES
 		logging.c++
 		main.c++
+		map.c++
 		map_loader.c++
 		players/player.c++
 		units/unit_factory.c++

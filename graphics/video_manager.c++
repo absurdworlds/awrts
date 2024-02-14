@@ -13,6 +13,7 @@
 #include <aw/graphics/gl/uniform_buffer.h>
 #include <aw/graphics/gl/camera.h>
 #include <aw/graphics/gl/awgl/api.h>
+#include <aw/graphics/gl/utility/program_loader.h>
 #include <aw/graphics/glsl/vec.h>
 
 #include <GLFW/glfw3.h>
@@ -25,6 +26,8 @@ constexpr size_t common_block_size = sizeof(gl3::mat4) + sizeof(gl3::vec3) + siz
 
 struct video_manager::context {
 	gl3::render_context rc;
+	gl3::camera* active_camera;
+	gl3::camera camera;
 
 	optional<gl3::uniform_buffer> common;
 	int hx, hy;
@@ -60,6 +63,7 @@ video_manager::video_manager(i32 resX, i32 resY, bool fullscreen, bool vsync)
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 	wnd = glfwCreateWindow(resX, resY, "awrts", monitor, nullptr);
 
+	glfwSetWindowUserPointer(wnd, this);
 	glfwMakeContextCurrent(wnd);
 
 
@@ -69,7 +73,6 @@ video_manager::video_manager(i32 resX, i32 resY, bool fullscreen, bool vsync)
 
 	ctx = std::make_unique<context>();
 
-	reshape(resX, resY);
 
 	//--------------------
 	// Set default parameters
@@ -87,9 +90,46 @@ video_manager::video_manager(i32 resX, i32 resY, bool fullscreen, bool vsync)
 	gl::clear_color( 1.0f, 1.0f, 1.0f, 1.0f );
 	gl::clear_depth( 1.0f );
 	gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+
+
+	auto vsh = gl3::load_shader( gl::shader_type::vertex,   "data/shaders/default.vsh" );
+	auto fsh = gl3::load_shader( gl::shader_type::fragment, "data/shaders/default.fsh" );
+
+	std::vector<gl3::shader> shaders;
+	if (vsh)
+		shaders.push_back(std::move(*vsh));
+	if (fsh)
+		shaders.push_back(std::move(*fsh));
+
+	gl3::program program;
+	program.link(shaders);
+
+	default_program = std::move(program);
+	auto block = default_program->uniform_block("common_data");
+
+	GLuint common_block_idx  = 0;
+	size_t common_block_size = sizeof(gl3::mat4) + sizeof(gl3::vec3) + sizeof(gl3::vec4);
+	ctx->common.emplace(common_block_idx, common_block_size);
+
+	gl3::vec4 lint{ 1.0, 1.0, 1.0, 1.0 };
+	gl3::vec3 ldir{ 0.577, 0.577, 0.577 };
+	ctx->common->set_data(sizeof(gl3::mat4), lint.array(), ldir.array());
+	ctx->active_camera = &ctx->camera;
+	ctx->rc.camera_position = math::identity_matrix<float, 4>;
+
+	ctx->common->bind(*default_program, block);
+
+
+	ctx->camera.set_near_z(0.5f);
+	ctx->camera.set_far_z(5000.0f);
+
+	ctx->camera.set_aspect_ratio(1.0f);
+	ctx->camera.set_fov( degrees<float>{90} );
+
+	reshape(resX, resY);
 }
 
-video_manager::video_manager(video_manager&& other)
+video_manager::video_manager(video_manager&& other) noexcept
 {
 	wnd  = other.wnd;
 	other.wnd = nullptr;
@@ -97,7 +137,7 @@ video_manager::video_manager(video_manager&& other)
 	cmds = std::move(other.cmds);
 }
 
-video_manager& video_manager::operator=(video_manager&& other)
+video_manager& video_manager::operator=(video_manager&& other) noexcept
 {
 	wnd  = other.wnd;
 	other.wnd = nullptr;
@@ -119,12 +159,21 @@ bool video_manager::run()
 void video_manager::begin_render()
 {
 	gl::clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+	gl::use_program( gl3::program_handle( *default_program ));
+	ctx->rc.set_program(*default_program);
 
-	cmds.render(ctx->rc);
+}
+
+void video_manager::submit_command(gl3::command_storage cmd)
+{
+	cmds.add(std::move(cmd));
 }
 
 void video_manager::end_render()
 {
+	cmds.render(ctx->rc);
+	cmds.cmds.clear();
+
 	gl::use_program( gl::no_program );
 	glfwSwapBuffers(wnd);
 }
@@ -147,10 +196,11 @@ void video_manager::reshape(int x, int y)
 
 	ctx->hx = x;
 	ctx->hy = y;
-	if (ctx->rc.active_camera) {
-		ctx->rc.active_camera->set_aspect_ratio( float(x) / float(y) );
+	if (ctx->active_camera) {
+		ctx->active_camera->set_aspect_ratio( float(x) / float(y) );
 
-		auto proj = ctx->rc.active_camera->projection_matrix();
+		auto proj = ctx->active_camera->projection_matrix();
+		ctx->rc.projection = proj;
 		ctx->common->set_data(0, gl3::array(proj));
 	}
 }

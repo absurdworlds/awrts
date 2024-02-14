@@ -10,8 +10,7 @@
 #define awrts_component_h
 #include <aw/types/types.h>
 #include <awrts/entity.h>
-namespace aw {
-namespace rts {
+namespace aw::rts {
 struct component {
 	component(entity& ent);
 	virtual ~component() = default;
@@ -20,6 +19,5 @@ struct component {
 
 	ent_id _id;
 };
-} // namespace rts
-} // namespace aw
+} // namespace aw::rts
 #endif//awrts_component_h

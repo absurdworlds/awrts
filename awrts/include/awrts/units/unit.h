@@ -8,13 +8,15 @@
  */
 #ifndef awrts_unit_h
 #define awrts_unit_h
-#include <awrts/units/unit_type.h>
 #include <awrts/component.h>
-
+#include <awrts/units/unit_type.h>
+#include <aw/graphics/gl/model.h>
+#include <aw/graphics/glsl/mat.h>
 namespace aw::rts {
 struct unit : entity {
 	// FIXME: temporary, until graphics component is implemented
-	//irr::scene::ISceneNode* node;
+	gl3::model* model = nullptr;
+	gl3::mat4 transform;
 };
 } // namespace aw::rts
 #endif//awrts_unit_table_h

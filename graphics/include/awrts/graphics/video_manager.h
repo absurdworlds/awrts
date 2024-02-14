@@ -14,10 +14,15 @@
 #include <aw/types/types.h>
 #include <aw/types/string_view.h>
 #include <aw/graphics/gl/command_list.h>
+#include <aw/graphics/gl/program.h>
 
 class GLFWwindow;
 
 namespace aw {
+namespace gl3 {
+struct camera;
+} // namespace gl3
+
 namespace graphics {
 
 struct initialization_failure : std::runtime_error {
@@ -34,15 +39,16 @@ struct video_manager {
 	video_manager(i32 resX, i32 resY, bool fullscreen, bool vsync);
 
 	video_manager(video_manager const&) = delete;
-	video_manager(video_manager&& other);
+	video_manager(video_manager&& other) noexcept;
 
 	video_manager& operator=(video_manager const&) = delete;
-	video_manager& operator=(video_manager&& other);
+	video_manager& operator=(video_manager&& other) noexcept;
 
 	~video_manager();
 
 	bool run();
 	void begin_render();
+	void submit_command(gl3::command_storage cmd);
 	void end_render();
 
 	bool is_window_active();
@@ -57,6 +63,8 @@ private:
 
 	struct context;
 	std::unique_ptr<context> ctx;
+
+	std::optional<gl3::program> default_program;
 };
 } // namespace graphics
 } // namespace aw

@@ -7,16 +7,11 @@
  * This is free software: you are free to change and redistribute it.
  * There is NO WARRANTY, to the extent permitted by law.
  */
-#include <iostream>
-#include <chrono>
-#include <ratio>
-
 #include <aw/types/types.h>
 
 #include <awrts/logging.h>
 #include <aw/log/ostream_logger.h>
 #include <aw/log/ml_raii_wrapper.h>
-
 #include <awrts/graphics/video_manager.h>
 
 #include <awrts/version.h>
@@ -25,6 +20,9 @@
 #include <awrts/players/player.h>
 #include <awrts/units/unit_table.h>
 #include <awrts/units/unit_factory.h>
+#include <iostream>
+#include <chrono>
+#include <ratio>
 
 namespace aw {
 namespace rts {
@@ -41,7 +39,7 @@ void init_video(graphics::video_manager& video)
 }
 
 
-bool render(graphics::video_manager& video)
+bool render(graphics::video_manager& video, map& map)
 {
 	journal.info("render()", "Rendering frame.");
 	// send data to renderer process
@@ -50,6 +48,7 @@ bool render(graphics::video_manager& video)
 
 	if (video.is_window_active()) {
 		video.begin_render();
+		map.render(video);
 		video.end_render();
 	}
 
@@ -71,7 +70,7 @@ int run_game(int c, char const* const* v)
 	journal.info("main()", "Initializing game components.");
 	unit_factory uf{video};
 	map_loader mapman{video, uf};
-	mapman.load("data/maps/dummy.hdf");
+	map map = *mapman.load("data/maps/dummy.aw");
 
 	player pl{video};
 
@@ -123,12 +122,13 @@ int run_game(int c, char const* const* v)
 			update();
 		}
 
-		run = render(video);
+		run = render(video, map);
 	}
 
 	journal.info("main()", "Main loop end.");
 
 	journal.info("main()", "Exiting.");
+	return EXIT_SUCCESS;
 }
 
 int main(int c, char const* const* v)

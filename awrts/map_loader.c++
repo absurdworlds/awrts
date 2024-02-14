@@ -11,7 +11,9 @@
 #include <awrts/units/unit_table.h>
 #include <awrts/logging.h>
 
-#include <aw/math/vector2d.h>
+#include <aw/graphics/glsl/vec.h>
+#include <aw/math/matrix3.h>
+#include <aw/math/transform.h>
 
 #include <aw/io/input_file_stream.h>
 #include <aw/doc/parser.h>
@@ -95,7 +97,7 @@ void parse_unit_node(doc::parser& parser, std::vector<spawn_node>& out)
 
 } // namespace
 
-bool map_loader::load(fs::path const& map_path)
+auto map_loader::load(fs::path const& map_path) -> std::optional<map>
 {
 	io::input_file_stream stream{map_path};
 	doc::parser parser{stream, &log_impl};
@@ -133,6 +135,7 @@ bool map_loader::load(fs::path const& map_path)
 	unit_table utypes;
 	load_unit_types(utypes, "data/units.aw");
 
+	map result;
 	for (auto& node : units) {
 		journal.info("map_loader", "Spawning unit " + node.type);
 		auto* type = utypes[node.type];
@@ -144,11 +147,16 @@ bool map_loader::load(fs::path const& map_path)
 		// there should be a 'map' object with a 'spawn_unit' method
 		// (or… dunno, will see)
 		float h = type->movement.height;
-		//unit.node->setPosition({node.pos[0], 0.0f, node.pos[1]});
-		//unit.node->setRotation({0.0f, node.facing, 0.f});
+
+		gl3::vec3 pos{node.pos[0], 0.0f, node.pos[1]};
+		gl3::vec3 rot{0.0f, node.facing, 0.f};
+		auto deg = math::vector3d<degrees<float>>( rot );
+		unit.transform = math::make_transform( pos, math::matrix_from_euler( deg ) );
+
+		result.units.push_back(unit);
 	}
 
-	return true;
+	return result;
 }
 
 } // namespace aw::rts

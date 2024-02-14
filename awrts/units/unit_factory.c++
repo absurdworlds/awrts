@@ -18,14 +18,12 @@ unit unit_factory::create_unit(unit_type const& type)
 {
 	fs::path model_name{type.visual.model_name.begin(), type.visual.model_name.end()};
 	fs::path path = model_path/model_name;
-	
-	using namespace irr;
-	using namespace irr::scene;
+
 	auto mesh = graphics::load_obj( path );
 
 	// FIXME: temporary
 	unit u;
-	//u.node = node;
+	u.model = mesh;
 	return u;
 }
 

@@ -9,22 +9,14 @@
  */
 #ifndef awrts_obj_loader_h
 #define awrts_obj_loader_h
-#include <stdexcept>
-#include <aw/types/types.h>
+#include <aw/graphics/gl/model.h>
 #include <aw/io/filesystem.h>
+#include <aw/types/types.h>
+#include <stdexcept>
 
-namespace irr {
-namespace scene {
-class CSceneManager;
-class SAnimatedMesh;
-}
-} // namespace irr
+namespace aw::graphics {
 
-namespace aw {
-namespace graphics {
+auto load_obj( fs::path const& path ) -> gl3::model*;
 
-void* load_obj( fs::path const& path );
-
-} // namespace graphics
-} // namespace aw
+} // namespace aw::graphics
 #endif//awrts_video_manager_h
